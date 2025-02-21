@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <!-- Include header partial -->
+    <%- include ('partials/header.ejs') %>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="container">
+        <!-- Display news updates -->
+        <b>NEWS:</b>
+        <marquee>
+            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.  
+        </marquee>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <!-- Logo and college name -->
+        <div class="logo-container">
+            <img src="/public/css/images/logo.png" alt="logo" class="logo">
+            <h1 id="headerid">RD Collage of Education Auckland</h1>
+        </div>
+
+        <!-- Include navbar partial -->
+        <%- include ('partials/navbar1.ejs') %>
+    </div>
+</div>
+
+<!-- Courses Section -->
+<div class="courses-section">
+    <h2>Courses</h2>
+    <!-- List of courses -->
+    <ul>
+        <li>Course 1: Introduction to Education</li>
+        <li>Course 2: Educational Psychology</li>
+        <li>Course 3: Curriculum Development</li>
+        <li>Course 3: Fundamental of Web Development</li>
+        <li>Course 4: Language Teaching Methodologies</li>
+        <li>Course 5: Literacy and Reading Education</li>
+        <li>Course 6: Mathematics Education</li>
+        <li>Course 7: Science Education</li>
+        <li>Course 8: Social Studies Education</li>
+        <li>Course 9: Physical Education and Health</li>
+    </ul>
+</div>
+
+<div>
+    <!-- Include footer partial -->
+    <%- include ('partials/footer.ejs') %>
+</div>
+
+</body>
+</html>

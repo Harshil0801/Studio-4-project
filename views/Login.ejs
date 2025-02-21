@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/header.ejs') %>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <b>NEWS:</b>
+        <marquee>
+        Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.
+        </marquee>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <div class="logo-container">
+            <img src="/public/css/images/logo.png" alt="logo" class="logo">
+            <h1 id="headerid">RD Collage of Education Auckland</h1>
+        </div>
+
+        <%- include ('partials/navbar1.ejs') %>
+</div>
+</div>
+<div class="container">
+    <h2><Login/Register</h2>
+    <form action='./auth' method="POST">
+        <input type="text" name="username" placeholder="User Name"username" required><br>
+        <label FOR="password">
+        </label>
+        <input type="password" name="password" placeholder="Password" id="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="/Register">Register here</a></p>
+</div>
+<%- include ('partials/footer.ejs') %>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Set character encoding to UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Set viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Set the title of the webpage -->
+    <title>Gallery</title>
+    <!-- CSS styles for Gallery -->
+    <style>
+        /* CSS styles for Gallery */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #4ea6e0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 20px;
+        }
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Logo and college name -->
+            <div class="logo-container">
+                <img src="/public/css/images/logo.png" alt="logo" class="logo">
+                <h1 id="headerid">RD Collage of Education Auckland</h1>
+            </div>
+            <%- include ('partials/navbar1.ejs') %>
+        </div>
+        
+        <div class="container">
+            <!-- Gallery section -->
+            <h2>Gallery</h2>
+            <div class="gallery">
+                <!-- Gallery items -->
+                <div class="gallery-item">
+                    <img src="./public/css/images/image1.jpg" alt="Image 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image2.jpg" alt="Image 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image3.jpg" alt="Image 3">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image4.jpg" alt="Image 4">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image5.jpg" alt="Image 5">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image6.jpg" alt="Image 6">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image7.jpg" alt="Image 7">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image8.jpg" alt="Image 8">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image9.jpg" alt="Image 9">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image10.jpg" alt="Image 10">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image11.jpg" alt="Image 11">
+                </div>
+                <div class="gallery-item">
+                    <img src="./public/css/images/image12.jpg" alt="Image 12">
+                </div>
+            </div>
+        </div>
+        <!-- Include footer partial -->
+        <%- include ('partials/footer.ejs') %>
+    </div>
+</body>
+</html>

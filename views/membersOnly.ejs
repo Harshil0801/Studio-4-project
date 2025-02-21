@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <!-- Include the header partial -->
+    <%-include('partials/header.ejs') %>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <!-- Display NEWS section -->
+        <b>NEWS:</b>
+        <!-- Display scrolling updates -->
+        <marquee>
+            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments. 
+        </marquee>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <!-- Logo and college name -->
+        <div class="logo-container">
+            <!-- Display college logo -->
+            <img src="/public/css/images/logo.png" alt="logo" class="logo">
+            <!-- Display college name -->
+            <h1 id="headerid">RD College of Education Auckland</h1>
+        </div>
+
+        <!-- Include navbar partial -->
+        <%- include ('partials/navbar2.ejs') %>
+    </div>
+</div>
+
+<!-- Welcome message -->
+<h2 style="color: #171ee7d8; font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;">
+    WELCOME YOU ARE LOGIN TO YOU ACCOUNT. Click to <a href="/courses">View Courses</a>
+</h2>
+
+<!-- Include the footer partial -->
+<%- include ('partials/footer.ejs') %>
+
+</body>
+</html>

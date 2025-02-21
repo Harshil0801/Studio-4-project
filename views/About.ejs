@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Set character encoding to UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Set viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Set the title of the webpage -->
+    <title>College Website</title>
+    <!-- Link to the external stylesheet -->
+    <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <!-- Display news updates -->
+        <b>NEWS:</b>
+        <marquee>
+            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.
+        </marquee>
+    </div>
+</div>
+<!-- Include navbar partial -->
+<%- include ('partials/navbar1.ejs') %>
+<div class="main-content">
+    <div class="container">
+        <!-- Main content section -->
+        <h1>About Us</h1>
+        <!-- Introduction to the college -->
+        <p>Welcome to RD College of Education Auckland! We are a leading educational institution dedicated to providing high-quality education and fostering academic excellence.</p>
+        <!-- Brief history of the college -->
+        <p>Established in [year], our college has a rich history of [brief description of college history]. We offer a wide range of courses and programs designed to meet the diverse needs of our students.</p>
+        <!-- Mission statement of the college -->
+        <p>Our mission is to [mission statement]. We are committed to providing a supportive learning environment, nurturing the talents and aspirations of our students, and preparing them for successful careers and lifelong learning.</p>
+        <!-- College philosophy -->
+        <p>At RD College of Education Auckland, we believe in the power of education to transform lives and make a positive impact on society. Join us in our journey towards excellence!</p>
+    </div>
+</div>
+
+<!-- Include footer partial -->
+<%- include ('partials/footer.ejs') %>
+
+</body>
+</html>
