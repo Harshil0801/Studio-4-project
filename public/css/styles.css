@@ -100,6 +100,8 @@ nav a {
     font-size: 28px;
     font-weight: 500;
     margin-bottom: 30px;
+    position: relative;
+    left: 23%;
     color:#90c5f7;
 }
 
