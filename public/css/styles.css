@@ -31,15 +31,17 @@ html,body {
 
 .logo {
     height: 100px;
+    display: block;
 }
 
 nav {
+    margin-left: 52%;
     float: right;
     padding: 25px 0px;
 }
 
 nav a {
-    color: black;
+    color: blue;
     text-decoration: none;
     font-size: 18px;
     padding: 2px 10px;
@@ -245,4 +247,116 @@ nav a {
     width: 100%;
     height: auto;
     display: block;
+}
+ 
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header section styles */
+.header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.header .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+marquee {
+    font-size: 16px;
+}
+
+/* Logo section styles */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container .logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+#headerid {
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Main content area */
+.main-content {
+    background-color: #fff;
+    padding: 40px 0;
+}
+
+/* Login/Register form styling */
+.container-form {
+    width: 100%;
+    max-width: 400px;
+    background-color: rgb(168, 175, 169);
+    color: white;
+    text-align: center;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+.container-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.container-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.container-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.container-form button:hover {
+    background-color: #45a049;
+}
+
+.container-form p {
+    font-size: 14px;
+}
+
+.container-form a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.container-form a:hover {
+    text-decoration: underline;
+}
+
+/* Footer section styles */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
 }
