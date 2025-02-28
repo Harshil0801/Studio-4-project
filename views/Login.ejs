@@ -1,42 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include ('partials/header.ejs') %>
+    <%- include('partials/header.ejs') %>
+    
 </head>
 <body>
-
+    <head>
+        <style>
+            #headerid {
+                font-size: 66px; /* Adjust the size as needed */
+            }
+        </style>
+    </head>
+    
+<!-- Header Section -->
 <div class="header">
     <div class="container">
-        <b>NEWS:</b>
-        <marquee>
-        Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.
-        </marquee>
+        <img src="/public/css/images/logo.png" alt="logo" class="logo">  
+        <%- include('partials/navbar1.ejs') %>
     </div>
 </div>
 
+<!-- Main Content Section -->
 <div class="main-content">
     <div class="container">
+        <!-- Logo and Header -->
         <div class="logo-container">
-            <img src="/public/css/images/logo.png" alt="logo" class="logo">
-            <h1 id="headerid">RD Collage of Education Auckland</h1>
+             
+            <h1 id="headerid"> NZ College of Education Auckland</h1>
         </div>
 
-        <%- include ('partials/navbar1.ejs') %>
+        <!-- Navbar -->
+    
+    </div>
 </div>
-</div>
-<div class="container" style="width: 200px; height: 100px; background-color: blue; color: white; text-align: center; line-height: 100px; border-radius: 10px;">
-    <h2><Login/Register</h2>
+
+<!-- Login/Register Form Section -->
+<div class="container-form">
+    <h2>Login / Register</h2>
     <form action='./auth' method="POST">
-        <input type="text" name="username" placeholder="User Name"username" required><br>
-        <label FOR="password">
-        </label>
+        <input type="text" name="username" placeholder="User Name" required><br>
+        
+        <label for="password">Password:</label><br>
         <input type="password" name="password" placeholder="Password" id="password" required><br>
+        
         <button type="submit">Login</button>
     </form>
     <p>Don't have an account? <a href="/Register">Register here</a></p>
 </div>
-<%- include ('partials/footer.ejs') %>
+
+<!-- Footer Section -->
+<%- include('partials/footer.ejs') %>
 
 </body>
 </html>
