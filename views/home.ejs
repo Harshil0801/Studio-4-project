@@ -3,137 +3,98 @@
 <head>
     <!-- Include the header partial -->
     <%- include ('partials/header.ejs') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University of Auckland</title>
 </head>
 <body>
-
-<div class="header">
-    <div class="container">
-        <b>NEWS:</b>
-        <!-- Display scrolling updates -->
-        <marquee>
-            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.   
-        </marquee>
-    </div>
-</div>
-
-<div class="main-content">
-    <div class="container">
-        <div class="logo-container">
-            <!-- Display college logo -->
-            <img src="./public/css/images/logo.png" alt="logo" class="logo">
-            <!-- Display college name -->
-
+    <header>
+        <div class="top-bar">
+            <p>Faculty changes have taken effect from 1 January. <a href="#">Find out more</a></p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/students">Students</a></li>
+                <li><a href="/staff">Staff</a></li>
+                <li><a href="/cources">Cources</a></li>
+                <li><a href="/Gallery">On campus</a></li>
+                <li><a href="/about">About us</a></li>
+                <li><a href="/news">News and Events</a></li>
+                <li><a href="/login">Signin</a></li>
+            </ul>
+            <div class="search-bar">
+                <input type="text" placeholder="Rapunga / Search">
+                <button type="submit">Q</button>
+            </div>
+        </nav>
+        <div class="university-header">
+            <h1>UNIVERSITY OF NEW ZEALAND</h1>
+            <p>Get set for your future with a qualification. You’ll gain the skills you need to seamlessly transition from study to industry. Become work-ready, capable and confident. </p>
            
-            <h1 id="headerid"> NZ College of Education Auckland</h1>
-            
-        </div>
-
-        <!-- Include navbar partial -->
-        <%- include ('partials/navbar1.ejs') %>
-
-        <div class="download">
-            <!-- Display download image -->
-            <img src="./public/css/images/download.jpg" alt="download image">
-        </div>
-
-        <div class="main-sector">
-            <div class="event">
-                <!-- Display recent events with scrolling -->
-                <h2 class="heading">Recent Events</h2>
-                <div>
-                    <marquee direction="up" scrollamount="7" style="height:340px">
-                        <ul>
-                            <!-- List recent events -->
-                            <li>22-March-2024: Sahed Bagat Singh Tribute. Show your Talent on Level 1 </li>
-                            <li>28-March-2024: Earth Day. Show your Talent on Level 1 </li>
-                            <li>1-April-2024: April Fool's Day. Show your Talent on Level 1 </li>
-                            <li>12-April-2024: Time Waste Day. Show your Talent on Level 1 </li>
-                            <li>16-April-2024: Singh Tribute. Show your Talent on Level 1 </li>
-                            <li>18-April-2024: Result Day. Show your Talent on Level 1 </li>
-                            <li>21-April-2024: Running Event. Show your Talent on Level 1 </li>
-                            <li>28-April-2024: Summer Break. Show your Talent on Level 1 </li>
-                        </ul>
-                    </marquee>
+    
+        <img style="width: 100%; height: 450px;" src="https://www.auckland.ac.nz/content/auckland/en/jcr:content/banner/imageMD.img.768.medium.jpg/1740710089229.jpg" class=" " alt="Students walking together outside">    </header>
+        <div class="College">
+            <div class="uoa">
+                <div class="content">
+                    <h1 role="heading" aria-level="1">Student-hub</h1>
+                    <P>Drop in to a Student Hub near you for advice on any aspect of your studies and life at University. </P>
+                    <a href="#" class="btn-btn--white">Find out more</a>
                 </div>
             </div>
+            <img style="height: 230px; position: inherit; right: 750px; bottom: 30px" src="./public/css/images/image10.jpg" alt="Students studying together">
+            <p style=" position: inherit; left: -200px; bottom: 220px">Our prestigious college is ranked among the top institutions globally, offering exceptional education and vibrant campus life. The **Student Hub** provides personalized support, guiding students in academics, career advice, and well-being. 
+                With expert staff and modern resources, we empower students to achieve success in every aspect of their journey.</p>
         </div>
-
-        <div class="event-container">
-            <div class="event">
-                <!-- Display campus news -->
-                <h2 class="heading">Campus News</h2>
-                <div>
-                    <ul>
-                        <!-- Display campus news items -->
-                        <li>
-                            <span class="Campus-imag">
-                                <img src="./public/css/images/imagecampus-1.png">
-                            </span>
-                            <h2>Guest Lectures.</h2>
-                            <h6>20.March.2024</h6>
-                            <p>Announcements about upcoming guest lectures, including information about the speaker, topic, date, time, and location.</p>
-                        </li>
-                        <li>
-                            <span class="Campus-imag">
-                                <img src="./public/css/images/Student2.jpeg">
-                            </span>
-                            <h2>There are many activities.</h2>
-                            <h6>20.April.2024</h6>
-                            <p>Magic show by management students</p>
-                        </li>
-                        <li>
-                            <span class="Campus-imag">
-                                <img src="./public/css/images/university.jpg">
-                            </span>
-                            <h2>There are many activities.</h2>
-                            <h6>20.May.2024</h6>
-                            <p>Table tennis match for all students..</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="event">
-                <!-- Display college events -->
-                <h2 class="heading">College Events</h2>
-                <div>
-                    <ul>
-                        <!-- List upcoming college events -->
-                        <li>
-                            <span class="event-date">11<br>April</span>
-                            Join us for an invaluable opportunity to polish your interview skills at NZ College of IT.
-                        </li>
-                        <li>
-                            <span class="event-date">11<br>April</span>
-                            Join us for an invaluable opportunity to polish your interview skills at NZ College of IT.
-                        </li>
-                        <li>
-                            <span class="event-date">11<br>April</span>
-                            Join us for an invaluable opportunity to polish your interview skills at NZ College of IT.
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
-</div>
-<div class="main-section">
-    <div class="container about-us">
-        <div>
-            <!-- Display information about the institute -->
-            <h4 class="subhead">Our Institute</h4>
-            <h2 class="heading"> About NZ College of IT</h2>
-            <p>NZ College of IT is New Zealand's leading modern university and one of the largest universities in the country. We have been a university since 2000, but a place of learning for 120 years and operate in accordance with the Education Act (1989).</p>
-            <p>“NZ College of IT is strongly connected to its region, its unique cohort of students, and diverse business and community groups. Students complete their study at NZ College of IT and are well-supported to gain employment in relevant work areas.”
-                “NZ College of IT is actively engaged with industry and with its community at all levels of the organization.”
-                “NZ College of IT continues to seek solutions and adopted a community integration approach; a focus on youth and bridging programs and initiatives previously reported to try and achieve genuine equality and not just ‘an acceptable gap.’</p>
-            <!-- Add a link to read more about the institute -->
-            <a href="#">Read more</a>
+<main>
+    <section class="explore-options">
+        <div class="content">
+            <h2>Explore Your Options</h2>
+            <p>Ask any of our graduates—our 'learn by doing' approach makes for a memorable and valuable study experience. Our skilled and motivated graduates are highly sought-after!</p>
         </div>
-        <!-- Display image related to the institute -->
-        <img src="./public/css/images/about.jpg">
-    </div>
-</div>
-<!-- Include the footer partial -->
-<%- include ('partials/footer.ejs') %>
+        <div class="image">
+            <img src="./public/css/images/image10.jpg" alt="Students studying together">
+        </div>
+    </section>
+
+    <section class="qualifications">
+        <div class="image">
+            <img src="./public/css/images/image12.jpg" alt="Students in a classroom">
+        </div>
+        <div class="content">
+            <h2>150+ Qualifications and Courses</h2>
+            <p>Whether you want to work indoors or out, in a creative or technical field, or something in-between, we have a qualification for you. Browse our programmes or let a career advisor help you figure out your next big step.</p>
+            <a href="#" class="cta-button">Choose a Course</a>
+        </div>
+       
+    </section>
+
+    <section class="flexible-study">
+        <div class="content">
+            <h2>Flexible Study Options</h2>
+            <p>As well as our on-campus locations, we also offer other forms of learning so you can have a choice about what, when, where, and how you learn!</p>
+            <a href="#" class="cta-button">See Study Options →</a>
+        </div>
+        <div class="image">
+            <img src="./public/css/images/image8.jpg" alt="Student studying online">
+        </div>
+    </section>
+
+    <section class="free-fees">
+        <div class="image">
+            <img src="./public/css/images/image9.jpg" alt="Student receiving a scholarship">
+        </div>
+        <div class="content">
+            <h2>Free Fees & Scholarships</h2>
+            <p>Your study should give you the best chance to achieve what you want in life. Cost should not be a barrier. Apply for one of our many scholarships or take advantage of government schemes like Fees Free. In some cases, your study could be completely free!</p>
+            <a href="#" class="cta-button">Find Funding</a>
+        </div>
+        
+    </section>
+</main>
+    <footer>
+        <p>&copy; 2024 University of Auckland</p>
+    </footer>
 </body>
 </html>
