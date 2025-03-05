@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/header.ejs') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students - University of Auckland</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: #f0f8ff;
+        }
+        header {
+            background: #004080;
+            color: white;
+            padding: 20px;
+        }
+        section {
+            padding: 40px 20px;
+        }
+        .courses, .events, .alumni {
+            background: #e6f0ff;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .course-list, .event-gallery, .alumni-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .course-item, .alumni-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: left;
+        }
+        .event-gallery img, .alumni-item img {
+            width: 250px; 
+            height: auto; 
+            border-radius: 8px;
+        }
+        footer {
+            background: #002040;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Student Page</h1>
+        <p>Explore courses, events, and our proud alumni.</p>
+    </header>
+    
+    <main>
+        <!-- Courses Section -->
+        <section class="courses">
+            <h2>Available Courses</h2>
+            <div class="course-list">
+                <div class="course-item">
+                    <h3>Bachelor of Computer Science</h3>
+                    <p>Learn programming, AI, and data science.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Bachelor of Business Administration</h3>
+                    <p>Master business strategies and leadership skills.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Bachelor of Engineering</h3>
+                    <p>Innovate with mechanical, electrical, and civil engineering.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Bachelor of Arts</h3>
+                    <p>Explore literature, history, and creative arts.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Bachelor of Science</h3>
+                    <p>Dive into biology, chemistry, and physics.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Bachelor of Law</h3>
+                    <p>Gain expertise in legal studies and justice systems.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Master of Data Science</h3>
+                    <p>Specialize in big data analysis and machine learning.</p>
+                </div>
+                <div class="course-item">
+                    <h3>Diploma in Digital Marketing</h3>
+                    <p>Understand SEO, social media, and online branding.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Past Events Section -->
+        <section class="events">
+            <h2>Past Events</h2>
+            <div class="event-gallery">
+                <img src="public/css/images/PE1.jpg" alt="Graduation Ceremony">
+                <img src="public/css/images/PE2.jpg" alt="Sports Day">
+                <img src="public/css/images/PE3.jpg" alt="Cultural Festival">
+            </div>
+        </section>
+
+        <!-- Alumni Section -->
+        <section class="alumni">
+            <h2>Our Proud Alumni</h2>
+            <div class="alumni-list">
+                <div class="alumni-item">
+                    <img src="public/css/images/GS11.jpg" alt="Alumni 1">
+                    <h3>John Doe</h3>
+                    <p>CEO of TechCorp, Class of 2015</p>
+                </div>
+                <div class="alumni-item">
+                    <img src="public/css/images/GS22.jpg" alt="Alumni 2">
+                    <h3>Jane Smith</h3>
+                    <p>Renowned Data Scientist, Class of 2017</p>
+                </div>
+                <div class="alumni-item">
+                    <img src="public/css/images/GS33.jpg" alt="Alumni 3">
+                    <h3>Michael Johnson</h3>
+                    <p>Professor at Harvard, Class of 2012</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 University of Auckland</p>
+    </footer>
+</body>
+</html>

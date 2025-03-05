@@ -23,6 +23,15 @@ app.get('/', function(req, res) {
 	res.render("home"); // Render home page
 });
 
+app.get('/Student',function(req,res){
+	res.render('Student.ejs'); // Render login page
+   });
+
+app.get('/Staff',function(req,res){
+	res.render('Staff.ejs'); // Render login page
+   });
+   
+
 // Login page route
 app.get('/login',function(req,res){
  res.render('login.ejs'); // Render login page
