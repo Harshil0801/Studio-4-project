@@ -1,18 +1,81 @@
-<footer class="footer" style="background-color: black; color: white;">
+<footer class="footer">
     <!-- Footer container -->
-    <div class="container">
-        <div class="footer-content">
-            <!-- Footer logo -->
-            <div class="footer-logo">
-                <img src="./public/css/images/logo.png" alt="Footer Logo">
-            </div>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            background: cover;
+            color: white;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .footer-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #333;
+            color: white;
+        }
+        .footer-column {
+            flex: 1;
+            padding: 0 20px;
+        }
+        .footer-column:first-child {
+            border-right: 1px solid #555;
+        }
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .footer-column ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        .logo-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>Explore</h3>
+            <ul>
+                <li><a href="#">About the University</a></li>
+                <li><a href="#">Our faculties and institutes</a></li>
+                <li><a href="#">About our research</a></li>
+                <li><a href="#">Our campuses</a></li>
+                <li><a href="#">Libraries and Learning Services</a></li>
+                <li><a href="#">Learning and teaching</a></li>
+                <li><a href="#">Find a study option</a></li>
+                <li><a href="#">Our people</a></li>
+            </ul>
         </div>
-        <!-- Footer information -->
-        <div class="footer-info">
-            <!-- Copyright information -->
-            <p>&copy; 2024 RD College of Education Auckland. All rights reserved.</p>
-            <!-- Designer information -->
-            <p>Designed with <i class="fas fa-heart"></i> by Ramandeep Singh</p>
+        <div class="footer-column">
+            <h3>Help and support</h3>
+            <ul>
+                <li><a href="#">Contact us</a></li>
+                <li><a href="#">AskAuckland</a></li>
+                <li><a href="#">Emergencies and safety on campus</a></li>
+                <li><a href="#">Donate to the University</a></li>
+                <li><a href="#">Complaints</a></li>
+                <li><a href="#">Provide feedback</a></li>
+            </ul>
         </div>
     </div>
+</body>
 </footer>
