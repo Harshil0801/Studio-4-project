@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/header.ejs') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff - University of Auckland</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: #f0f8ff;
+        }
+        header {
+            background: #004080;
+            color: white;
+            padding: 20px;
+        }
+        section {
+            padding: 40px 20px;
+        }
+        .faculty {
+            background: #e6f0ff;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .faculty-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .faculty-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: left;
+        }
+        .faculty-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        footer {
+            background: #002040;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Meet Our Faculty</h1>
+        <p>Experienced lecturers guiding students towards excellence.</p>
+    </header>
+    
+    <main>
+        <section class="faculty">
+            <h2>Our Faculty Members</h2>
+            <div class="faculty-list">
+                <div class="faculty-item">
+                    <img src="public/css/images/L1.jpg" alt="Dr. John Williams">
+                    <h3>Dr. John Williams</h3>
+                    <p>PhD in Computer Science</p>
+                    <p>Teaches: Artificial Intelligence, Data Science</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="public/css/images/L2.jpg" alt="Dr. Emma Brown">
+                    <h3>Dr. Emma Brown</h3>
+                    <p>PhD in Business Administration</p>
+                    <p>Teaches: Marketing Strategies, Business Analytics</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="public/css/images/L3.jpg" alt="Dr. Robert Davis">
+                    <h3>Dr. Robert Davis</h3>
+                    <p>PhD in Mechanical Engineering</p>
+                    <p>Teaches: Robotics, Thermodynamics</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="public/css/images/L4.jpg" alt="Dr. Linda Smith">
+                    <h3>Dr. Linda Smith</h3>
+                    <p>PhD in Literature</p>
+                    <p>Teaches: English Literature, Creative Writing</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="public/css/images/L5.jpg" alt="Dr. Alan White">
+                    <h3>Dr. Alan White</h3>
+                    <p>PhD in Biology</p>
+                    <p>Teaches: Genetics, Microbiology</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="public/css/images/L5.jpg" alt="Dr. Sarah Johnson">
+                    <h3>Dr. Sarah Johnson</h3>
+                    <p>PhD in Law</p>
+                    <p>Teaches: Criminal Law, International Law</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="/public/images/staff7.jpg" alt="Dr. Michael Lee">
+                    <h3>Dr. Michael Lee</h3>
+                    <p>PhD in Physics</p>
+                    <p>Teaches: Quantum Mechanics, Astrophysics</p>
+                </div>
+                <div class="faculty-item">
+                    <img src="/public/images/staff8.jpg" alt="Dr. Karen Wilson">
+                    <h3>Dr. Karen Wilson</h3>
+                    <p>PhD in Psychology</p>
+                    <p>Teaches: Behavioral Science, Cognitive Psychology</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 University of Auckland</p>
+    </footer>
+</body>
+</html>
