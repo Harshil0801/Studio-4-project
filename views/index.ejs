@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - NZ College of Education</title>
+</head>
+<body>
+    <h1>Welcome to NZ College of Education</h1>
+    <h2>Available Courses</h2>
+    <ul>
+        <% courses.forEach(course => { %>
+            <li><a href="/course-details/<%= course.id %>"><%= course.name %></a></li>
+        <% }) %>
+    </ul>
+</body>
+</html>

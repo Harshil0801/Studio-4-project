@@ -122,19 +122,33 @@ app.get('/Courses', function (req,res){
 app.get('/Contact',function(req,res){
 	res.render('Contact',{title:'My Contact'});
 });
-app.get('/course-details/:id', (req, res) => {
-    const courseId = req.params.id;
+// Home route
+app.get('/', function(req, res) {
+    res.render("home"); // Render home page
+});
 
-    // Fetch course details from your database based on the ID
-    Course.findById(courseId, (err, course) => {
-        if (err) {
-            return res.status(500).send('Error fetching course details');
-        }
-
-        res.render('course-details', { course });
+// Courses page route
+app.get('/Courses', function(req, res) {
+    // Fetch courses from the database using the external connection
+    conn.query('SELECT * FROM courses', function(error, results, fields) {
+        if (error) throw error;
+        res.render('Courses', { courses: results });  // Pass courses data to the view
     });
 });
 
+// Course details route
+app.get('/course-details/:courseId', function(req, res) {
+    const courseId = req.params.courseId;
+    // Fetch specific course details based on the courseId
+    conn.query('SELECT * FROM courses WHERE id = ?', [courseId], function(error, result, fields) {
+        if (error) throw error;
+        if (result.length > 0) {
+            res.render('course-details', { course: result[0] }); // Render course details page
+        } else {
+            res.send('Course not found');
+        }
+    });
+});
 
 // Contact form submission route
 app.post('/contact', function(req, res) {
