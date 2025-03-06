@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hubs</title>
+    <%- include('partials/header.ejs') %>
+    <%- include('partials/navbar1.ejs') %>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px;
+            background-color: white;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+        .container2 {
+            justify-content: space-between;
+            padding: 20px;
+            background-color: white;
+            max-width: 1100px;
+            margin: 50px auto;
+        }
+        .content {
+            width: 60%;
+        }
+        h1 {
+            font-size: 46px;
+            color: #666;
+        }
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+        p1 {
+            font-size: 14px;
+            color: rgb(196, 196, 196);
+        }
+        .image img {
+            width: 90%;
+            border-radius: 2px;
+        }
+        h3 {
+            color: #3a3a3a;
+        }
+        .links {
+            grid-template-columns: repeat(3, 1fr);
+            height: 50%;
+            gap: 20px;
+            background-color: #0056A8;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 50px;
+            border-radius:2px ;
+        }
+      
+        .links a {
+            display: block;
+            color: whitesmoke;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .dropdown-content {
+            display: none;
+            padding: 10px;
+            background-color:#0056A8 ;
+            border-left: 3px solid#f4f4f4;
+            margin-bottom: 15px;
+        }
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="content">
+        <h1>Student Hubs</h1>
+        <p>Visit us for help and advice on any aspect of your studies and life at the University of Auckland.</p>
+        <div class="image">
+            <img src="./public/css/images/image11.jpg" alt="Student Hub Image">
+            <p>The Student Hubs are your physical gateway to Waipapa Taumata Rau | the University of Auckland. Our friendly staff are here to provide you with advice on any aspect of your studies and life at University.  </p>
+        </div>
+    </div>
+<div class="links">
+  <div>
+    <h3 style="color: whitesmoke;">Related Links</h3><hr>
+    <a href="#" onclick="toggleDropdown('itHub')">Student IT Hub</a>
+    <div class="dropdown-content" id="itHub">
+      <p1><strong>Announcements and News:</strong> Keep students updated with the latest news, events, and announcements related to the IT department.</p>
+      <p1><strong>Resource Library:</strong> Access study materials, tutorials, and e-books.</p>
+      <p1><strong>Job and Internship Listings:</strong> Find internship and job opportunities.</p>
+      <p1><strong>Project Showcases:</strong> Highlight student projects and research.</p>
+      <p1><strong>Discussion Forums:</strong> Engage in discussions and share knowledge.</p>
+    </div>
+  </div>
+
+  <div>
+    <a href="#" onclick="toggleDropdown('libraries')">Libraries and Learning Services</a>
+    <div class="dropdown-content" id="libraries">
+      <p1><strong>Online Catalog:</strong> Search for books, journals, and other resources.</p>
+      <p1><strong>E-Books and Journals:</strong> Access e-books and journals remotely.</p>
+      <p1><strong>Research Databases:</strong> List available research databases.</p>
+      <p1><strong>Study Spaces:</strong> Information about available study spaces.</p>
+      <p1><strong>Academic Support Services:</strong> Tutoring and writing centers.</p>
+    </div>
+  </div>
+
+  <div>
+    <a href="#" onclick="toggleDropdown('studyRoom')">Book a Group Study Room</a>
+    <div class="dropdown-content" id="studyRoom">
+      <p1><strong>Booking Policies:</strong> Maximum booking times and rules for usage.</p>
+      <p1><strong>Instructions for Use:</strong> Step-by-step guide for booking rooms.</p>
+      <p1><strong>Contact Information:</strong> Support details for booking issues.</p>
+      <p1><strong>Feedback Form:</strong> Submit feedback on study room experiences.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="container2">
+    <h2>Student Hubs services</h2>
+    <hr />
+    <p>
+      Whether you are a prospective student or a current student from any of our faculties,
+      we can help you with a wide range of information and services, including:
+    </p>
+    <ul>
+      <li>Exploring your study options with the University, including career pathways and Postgraduate level possibilities.</li>
+      <li>Understanding and navigating entry into the University, including support with your application, admission, and enrolment.</li>
+      <li>Course selection, enrolment, degree planning, and structuring your studies.</li>
+      <li>Help and advice with fees, transcripts, and visa enquiries.</li>
+      <li>Understanding and navigating University life.</li>
+      <li>Library services and student IT support.</li>
+      <li>University support options, including connection to wellbeing, disability, and engagement services.</li>
+    </ul>
+
+    <h3>Locations and hours</h3>
+    <hr />
+    <p>
+      <strong>Student Hub, City Campus</strong><br />
+      Te Herenga Mātauranga Whānui | General Library<br />
+      Building 109, 5 Alfred Street, Auckland<br />
+      <div>
+        <a href="#" onclick="toggleDropdown('Wayfinding Map')">Wayfinding Map</a>
+        <div class="dropdown-content" style="background-color: whitesmoke; border-left: 3px solid#0056A8;" id="Wayfinding Map">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDb6YW8G6HDbtCTMT5aIunIoOTpy488aR91g&s" alt="Wayfinding Map">
+            <p>Main Entrance: Welcomes you with a spacious lobby and information desk.</p>
+               <p> Library: A quiet space for study and research, equipped with computers and a vast collection of books.</p>
+                <p>Cafeteria: Offers a variety of meals and snacks, with seating areas for relaxation and socializing.</p>
+               <p> Classrooms: Multiple classrooms for lectures and seminars.</p>
+               <p>Restrooms: Located near the main entrance and cafeteria.</p>
+        </div>
+      </div>
+    </p>
+
+    <h3>Visit To Campus</h3>
+    <hr />
+    <p>
+        If you would like to speak with someone from our friendly team, or access any of our services, <br>
+        please drop into one of our locations during our contact hours. Our closedown periods for<br>
+        each of our Student Hub locations are mentioned above.
+    <br><br>
+        You do not need an appointment, simply visit any Hub during our opening hours and the team will be happy to help. 
+    </p>
+</div>
+<script>
+    function toggleDropdown(id) {
+      const content = document.getElementById(id);
+      content.classList.toggle("show");
+    }
+</script>
+</body>
+</html>

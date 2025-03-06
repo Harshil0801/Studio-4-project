@@ -52,8 +52,8 @@
             font-size: 16px;
         }
 
-        buttons {
-            width: 140%;
+        .signinb{
+            width: 35%;
             padding: 20px;
             background: #005faf;
             border: none;
@@ -66,11 +66,11 @@
             transition: 0.3s ease-in-out;
         }
 
-        buttons:hover {
+        .signinb:hover {
             background: white;
             color: #005faf;
         }
-        button{
+        .registerb{
             width: 100%;
             padding: 12px;
             background: white;
@@ -84,7 +84,7 @@
             transition: 0.3s ease-in-out;
         }
 
-        button:hover {
+        .registerb:hover {
             background: #005faf;
             color: white;
         }
@@ -172,11 +172,11 @@
     <form action="./auth" method="POST">
         <input type="text" name="username" placeholder="Email or University Username" required>
         <input type="password" name="password" placeholder="Password" required>
-        <br><br><br><br>
-        <button type="submit">Sign In</button>
+        <br><br><br>
+        <button class="signinb" type="submit">Sign In</button>
 
     </form>
-    <br><br><br>
+    <br><br>
     <a class="b" href="#">I've forgotten my password</a>
 
     <p>Or sign in with one of the following services:</p>
@@ -207,7 +207,7 @@
             work at the University of Auckland</p>
     </div>  <br><br>
     <a href="/Register">
-        <button>Register for a new account</button>
+        <button class="registerb">Register for a new account</button>
     </a>
     <a class="b" href="/#">do you to go back⬅️</a>
 </div>
