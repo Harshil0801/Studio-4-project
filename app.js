@@ -122,6 +122,19 @@ app.get('/Courses', function (req,res){
 app.get('/Contact',function(req,res){
 	res.render('Contact',{title:'My Contact'});
 });
+app.get('/course-details/:id', (req, res) => {
+    const courseId = req.params.id;
+
+    // Fetch course details from your database based on the ID
+    Course.findById(courseId, (err, course) => {
+        if (err) {
+            return res.status(500).send('Error fetching course details');
+        }
+
+        res.render('course-details', { course });
+    });
+});
+
 
 // Contact form submission route
 app.post('/contact', function(req, res) {

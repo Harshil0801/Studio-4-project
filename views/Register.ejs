@@ -1,45 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Include the header partial -->
-    <%- include ('partials/header.ejs') %>
+    <%- include('partials/header.ejs') %>
+    <style>
+        /* Custom header style */
+        #headerid {
+            font-size: 66px; /* Adjust the size as needed */
+            color: #4A90E2; /* Add your desired color */
+        }
+
+        /* Styling for the container */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* Main content background */
+        .main-content {
+            background-color: #f4f4f4;
+            padding: 20px 0;
+        }
+
+        /* Form styling */
+        .container-form {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .container-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .container-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4A90E2;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .container-form button:hover {
+            background-color: #357ABD;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+        }
+
+        .header {
+            background-color: #4A90E2;
+            padding: 20px 0;
+            color: white;
+        }
+
+        .header .logo-container h1 {
+            font-size: 36px;
+            margin: 10px 0;
+        }
+
+        .logo-container h1 {
+            font-size: 48px;
+            color: #333;
+        }
+
+        a {
+            color: #4A90E2;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    
-<div class="main-content">
-    <div class="container">
-        <!-- Logo and college name -->
-        <div class="logo-container">
-            <!-- Display college logo -->
-            <img src="/public/images/css/logo.png" alt="logo" class="logo">
-            <!-- Display college name -->
-            <h1 id="headerid">RD Collage of Education Auckland</h1>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="container">
+            <img src="/public/css/images/logo.png" alt="logo" class="logo">  
+            <%- include('partials/navbar1.ejs') %>
         </div>
-
-        <!-- Include navbar partial -->
-        <%- include ('partials/navbar1.ejs') %>
     </div>
-</div>
 
-<!-- Student Registration Section -->
-<div class="container">
-    <h2>Student Registration</h2>
-    <!-- Registration form -->
-    <form action="/register" method="POST">
-        <!-- Username input -->
-        <input type="text" name="username" placeholder="Username" required><br>
-        <!-- Email input -->
-        <input type="email" name="email" placeholder="Email" required><br>
-        <!-- Password input -->
-        <input type="password" name="password" placeholder="Password" required><br>
-        <!-- Register button -->
-        <button type="submit">Register</button>
-    </form>
-    <!-- Link to login page -->
-    <p>Already have an account? <a href="/login">Login here</a></p>
-</div>
+    <!-- Main Content Section -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Logo and Header -->
+            <div class="logo-container">
+                <h1 id="headerid">RD College of Education Auckland</h1>
+            </div>
+            <!-- Navbar -->
+            <!-- Navbar is included above -->
+        </div>
+    </div>
 
-<!-- Include the footer partial -->
-<%- include ('partials/footer.ejs') %>
+    <!-- Student Registration Form Section -->
+    <div class="container-form">
+        <h2>Student Registration</h2>
+        <form action="/register" method="POST">
+            <!-- Username input -->
+            <input type="text" name="username" placeholder="Username" required><br>
+            <!-- Email input -->
+            <input type="email" name="email" placeholder="Email" required><br>
+            <!-- Password input -->
+            <input type="password" name="password" placeholder="Password" required><br>
+            <!-- Register button -->
+            <button type="submit">Register</button>
+        </form>
+        <!-- Link to login page -->
+        <p>Already have an account? <a href="/login">Login here</a></p>
+    </div>
+
+    <!-- Footer Section -->
+    <%- include('partials/footer.ejs') %>
 </body>
 </html>
