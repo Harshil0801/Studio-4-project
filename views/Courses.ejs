@@ -1,57 +1,87 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Include header partial -->
-    <%- include ('partials/header.ejs') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses - NZ College of Education Auckland</title>
+    <%- include ('partials/navbar1.ejs') %>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Courses Section Styles */
+        .courses-section {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .courses-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .courses-section li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .courses-section li:last-child {
+            border-bottom: none;
+        }
+
+        .courses-section li:hover {
+            background-color: #f9f9f9;
+            transform: scale(1.02);
+        }
+
+        .courses-section li a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .courses-section li a:hover {
+            color: #007bff;
+        }
+    </style>
 </head>
 
 <body>
-    <h3><a href="/course-details/<%= course._id %>"><%= course.name %></a></h3>
 
-<div class="header">
-    <div class="container">
-        <!-- Display news updates -->
-        <b>NEWS:</b>
-        <marquee>
-            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.  
-        </marquee>
+    <h1>Available Courses</h1>
+
+    <div class="courses-section">
+        <ul>
+            <li><a href="#">Introduction to Education</a></li>
+            <li><a href="#">Educational Psychology</a></li>
+            <li><a href="#">Curriculum Development</a></li>
+            <li><a href="#">Fundamentals of Web Development</a></li>
+            <li><a href="#">Language Teaching Methodologies</a></li>
+            <li><a href="#">Literacy and Reading Education</a></li>
+            <li><a href="#">Mathematics Education</a></li>
+            <li><a href="#">Science Education</a></li>
+            <li><a href="#">Social Studies Education</a></li>
+            <li><a href="#">Physical Education and Health</a></li>
+        </ul>
     </div>
-</div>
-
-<div class="main-content">
-    <div class="container">
-        <!-- Logo and college name -->
-        <div class="logo-container">
-            <img src="/public/css/images/logo.png" alt="logo" class="logo">
-            <h1 id="headerid"> NZ COLLEGE OF EDUCATION AUCKLAND</h1>
-        </div>
-
-        <!-- Include navbar partial -->
-        <%- include ('partials/navbar1.ejs') %>
-    </div>
-</div>
-
-<!-- Courses Section -->
-<div class="courses-section">
-    <h2>Courses</h2>
-    <!-- List of courses -->
-    <ul>
-        <li>Course 1: Introduction to Education</li>
-        <li>Course 2: Educational Psychology</li>
-        <li>Course 3: Curriculum Development</li>
-        <li>Course 3: Fundamental of Web Development</li>
-        <li>Course 4: Language Teaching Methodologies</li>
-        <li>Course 5: Literacy and Reading Education</li>
-        <li>Course 6: Mathematics Education</li>
-        <li>Course 7: Science Education</li>
-        <li>Course 8: Social Studies Education</li>
-        <li>Course 9: Physical Education and Health</li>
-    </ul>
-</div>
-
-<div>
-    <!-- Include footer partial -->
-    <%- include ('partials/footer.ejs') %>
-</div>
 
 </body>
+
 </html>
