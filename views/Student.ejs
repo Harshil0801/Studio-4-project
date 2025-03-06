@@ -4,7 +4,7 @@
     <%- include('partials/header.ejs') %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Students - University of Auckland</title>
+    <title>Students - NZ COLLEGE OF EDUCATION AUCKLAND</title>
     <link rel="stylesheet" href="/public/css/styles.css">
     <style>
         body {
@@ -22,13 +22,13 @@
         section {
             padding: 40px 20px;
         }
-        .courses, .events, .alumni {
+        .courses, .events, .alumni, .upcoming-courses, .completed-courses {
             background: #e6f0ff;
             margin: 20px 0;
             padding: 20px;
             border-radius: 10px;
         }
-        .course-list, .event-gallery, .alumni-list {
+        .course-list, .event-gallery, .alumni-list, .upcoming-course-list, .completed-course-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -62,41 +62,79 @@
     </header>
     
     <main>
-        <!-- Courses Section -->
+        <!-- Available Courses Section -->
         <section class="courses">
             <h2>Available Courses</h2>
             <div class="course-list">
                 <div class="course-item">
-                    <h3>Bachelor of Computer Science</h3>
+                    <h3><a href="/course-details/1">Bachelor of Computer Science</a></h3>
                     <p>Learn programming, AI, and data science.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Bachelor of Business Administration</h3>
+                    <h3><a href="/course-details/2">Bachelor of Business Administration</a></h3>
                     <p>Master business strategies and leadership skills.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Bachelor of Engineering</h3>
+                    <h3><a href="/course-details/3">Bachelor of Engineering</a></h3>
                     <p>Innovate with mechanical, electrical, and civil engineering.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Bachelor of Arts</h3>
+                    <h3><a href="/course-details/4">Bachelor of Arts</a></h3>
                     <p>Explore literature, history, and creative arts.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Bachelor of Science</h3>
+                    <h3><a href="/course-details/5">Bachelor of Science</a></h3>
                     <p>Dive into biology, chemistry, and physics.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Bachelor of Law</h3>
+                    <h3><a href="/course-details/6">Bachelor of Law</a></h3>
                     <p>Gain expertise in legal studies and justice systems.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Master of Data Science</h3>
+                    <h3><a href="/course-details/7">Master of Data Science</a></h3>
                     <p>Specialize in big data analysis and machine learning.</p>
                 </div>
                 <div class="course-item">
-                    <h3>Diploma in Digital Marketing</h3>
+                    <h3><a href="/course-details/8">Diploma in Digital Marketing</a></h3>
                     <p>Understand SEO, social media, and online branding.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Courses Section -->
+        <section class="upcoming-courses">
+            <h2>Upcoming Courses</h2>
+            <div class="upcoming-course-list">
+                <div class="course-item">
+                    <h3><a href="/course-details/9">Machine Learning for Data Science</a></h3>
+                    <p>Upcoming in the next semester. A deeper dive into AI and machine learning.</p>
+                </div>
+                <div class="course-item">
+                    <h3><a href="/course-details/10">Advanced Business Strategy</a></h3>
+                    <p>Learn strategies for scaling a business and leading effectively.</p>
+                </div>
+                <div class="course-item">
+                    <h3><a href="/course-details/11">Quantum Computing</a></h3>
+                    <p>New course for students interested in cutting-edge computing technologies.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Completed Courses Section -->
+        <section class="completed-courses">
+            <h2>Completed Courses</h2>
+            <div class="completed-course-list">
+                <div class="course-item">
+                    <h3><a href="/course-details/12">Introduction to Programming</a></h3>
+                    <p>Fundamentals of coding, algorithms, and problem-solving.</p>
+                </div>
+                <div class="course-item">
+                    <h3><a href="/course-details/13">Business Ethics</a></h3>
+                    <p>Understanding ethical decision-making in the business environment.</p>
+                </div>
+                <div class="course-item">
+                    <h3><a href="/course-details/14">Basic Electronics</a></h3>
+                    <p>A foundational course in electronics and circuit design.</p>
                 </div>
             </div>
         </section>
