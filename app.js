@@ -31,7 +31,9 @@ app.get('/Staff',function(req,res){
 	res.render('Staff.ejs'); // Render login page
    });
    
-
+app.get('/findmore',function(req,res){
+	res.render('findmore.ejs');
+})
 // Login page route
 app.get('/login',function(req,res){
  res.render('login.ejs'); // Render login page
