@@ -1,87 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Available Courses - NZ College of Education Auckland</title>
-    <%- include ('partials/navbar1.ejs') %>
+    <%- include ('partials/header.ejs') %> 
+    <%- include ('partials/navbar1.ejs') %> 
+
     <style>
         /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #e6f2ff; /* Light blue background */
             margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* Courses Section Styles */
-        .courses-section {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .courses-section ul {
-            list-style-type: none;
             padding: 0;
         }
 
-        .courses-section li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            transition: background-color 0.3s, transform 0.2s;
+        /* Hero Section (Matches News Page) */
+        .hero {
+            background-color: #00548f;
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 16px;
         }
 
-        .courses-section li:last-child {
-            border-bottom: none;
+        /* Main Content */
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 30px 0;
         }
 
-        .courses-section li:hover {
-            background-color: #f9f9f9;
-            transform: scale(1.02);
-        }
-
-        .courses-section li a {
-            text-decoration: none;
+        /* Section Title */
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
             color: #333;
-            transition: color 0.3s;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 8px;
         }
 
-        .courses-section li a:hover {
-            color: #007bff;
+        /* Courses Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* Course Cards */
+        .course-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease-in-out;
+        }
+        .course-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Course Title */
+        .course-card h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: #00548f;
+        }
+
+        /* Course Description */
+        .course-card p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Hidden More Information */
+        .more-info {
+            display: none;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.4;
+            padding-top: 5px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Read More Button */
+        .toggle-btn {
+            display: inline-block;
+            background: #00548f;
+            color: white;
+            padding: 6px 10px;
+            font-size: 13px;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+        }
+        .toggle-btn:hover {
+            background: #003f73;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Available Courses</h1>
-
-    <div class="courses-section">
-        <ul>
-            <li><a href="#">Introduction to Education</a></li>
-            <li><a href="#">Educational Psychology</a></li>
-            <li><a href="#">Curriculum Development</a></li>
-            <li><a href="#">Fundamentals of Web Development</a></li>
-            <li><a href="#">Language Teaching Methodologies</a></li>
-            <li><a href="#">Literacy and Reading Education</a></li>
-            <li><a href="#">Mathematics Education</a></li>
-            <li><a href="#">Science Education</a></li>
-            <li><a href="#">Social Studies Education</a></li>
-            <li><a href="#">Physical Education and Health</a></li>
-        </ul>
+    <!-- Hero Section (Same as News Page) -->
+    <div class="hero">
+        <h1>Available Courses</h1>
+        <p>Explore the range of courses offered at NZ College of Education.</p>
     </div>
 
-</body>
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="section-title">Courses</h2>
 
+        <!-- Courses Grid -->
+        <div class="courses-grid">
+            <!-- Course 1 -->
+            <div class="course-card">
+                <h3>Introduction to Education</h3>
+                <p>Learn about the fundamental principles of education, the role of teachers, and how education shapes society.</p>
+                <div class="more-info">
+                    <p>This course covers the history of education, modern teaching methodologies, and student psychology. Perfect for aspiring educators.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 2 -->
+            <div class="course-card">
+                <h3>Educational Psychology</h3>
+                <p>Explore theories of learning, cognitive development, and how psychological principles apply to education.</p>
+                <div class="more-info">
+                    <p>Students will analyze how motivation, behavior, and brain development influence learning and classroom performance.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 3 -->
+            <div class="course-card">
+                <h3>Curriculum Development</h3>
+                <p>Understand how curriculums are designed, implemented, and evaluated in different educational settings.</p>
+                <div class="more-info">
+                    <p>Topics include curriculum models, instructional design, and how to align educational content with student needs.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 4 -->
+            <div class="course-card">
+                <h3>Fundamentals of Web Development</h3>
+                <p>Gain hands-on experience in HTML, CSS, and JavaScript to build responsive and modern websites.</p>
+                <div class="more-info">
+                    <p>This course teaches front-end and back-end development, covering frameworks, UI/UX design, and web security basics.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 5 -->
+            <div class="course-card">
+                <h3>Language Teaching Methodologies</h3>
+                <p>Develop effective strategies for teaching language skills and enhancing student communication abilities.</p>
+                <div class="more-info">
+                    <p>Focuses on linguistic theories, interactive teaching techniques, and language acquisition research.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>   
+            
+            <div class="course-card">
+                <h3>Computer Science Basics</h3>
+                <p>An introduction to coding, problem-solving, and algorithm development.</p>
+                <div class="more-info">
+                    <p>Covers Python, JavaScript, and the fundamentals of data structures and logic.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 4 -->
+            <div class="course-card">
+                <h3>Business Management</h3>
+                <p>Gain insights into business operations, leadership, and financial strategies.</p>
+                <div class="more-info">
+                    <p>This course includes marketing principles, organizational behavior, and business ethics.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 5 -->
+            <div class="course-card">
+                <h3>Graphic Design & Visual Communication</h3>
+                <p>Learn essential design principles, branding, and digital content creation.</p>
+                <div class="more-info">
+                    <p>Includes Adobe Photoshop, Illustrator, and UX/UI design fundamentals.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 6 -->
+            <div class="course-card">
+                <h3>Healthcare & Nursing Fundamentals</h3>
+                <p>Introduction to patient care, medical ethics, and healthcare systems.</p>
+                <div class="more-info">
+                    <p>Students will learn about anatomy, first aid, and patient communication techniques.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+            <!-- Course 7 -->
+            <div class="course-card">
+                <h3>Environmental Science</h3>
+                <p>Study ecosystems, sustainability, and climate change.</p>
+                <div class="more-info">
+                    <p>This course covers conservation techniques and the impact of human activity on the environment.</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleContent(this)">Read More »</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function toggleContent(button) {
+            let content = button.previousElementSibling; // Get the hidden content
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                button.textContent = "Read Less «";
+            } else {
+                content.style.display = "none";
+                button.textContent = "Read More »";
+            }
+        }
+    </script>
+
+</body>
 </html>

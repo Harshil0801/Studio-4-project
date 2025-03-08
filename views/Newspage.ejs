@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+    <%- include ('partials/header.ejs') %>
+        <%- include ('partials/navbar1.ejs') %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            text-align: center;
+            background-color: #00548f;
+            color: white;
+            padding: 30px;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .hidden-content {
+            display: none;
+        }
+
+        .toggle-btn {
+            color: #00548f;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .ne-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .event-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .event-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>News & Events</h1>
+        <p>Stay updated with the latest happenings at NZ College.</p>
+    </div>
+
+    
+    <div class="container">
+        <h2>Latest News</h2>
+<hr><div class="ne-container">
+        <div class="card">
+            <h3>Scholarship Program Extended</h3>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvoMvy2hwl8QPDlTo5pzXO5T6XDd5o18korA&s" alt="scholarship">
+            <time datetime="2025-03-01">March 1, 2025</time>
+            <p>Our popular scholarship initiative has been extended for another semester. Applications are open until May 15.</p>
+            <div class="hidden-content">
+                <p>The scholarship covers partial tuition for qualified students. Recipients also get access to mentorship programs.</p>
+            </div>
+            <span class="toggle-btn" onclick="toggleContent(this)">Read more »</span>
+        </div>
+
+        <div class="card">
+            <h3>New Research Lab Opening</h3>
+            <img src="data:image/jpeg;base64,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" alt="New research">
+            <time datetime="2025-02-20">February 20, 2025</time>
+            <p>A cutting-edge research facility focusing on renewable energy and sustainability will open this spring.</p>
+            <div class="hidden-content">
+                <p>The lab features state-of-the-art equipment for solar and wind energy projects.</p>
+            </div>
+            <span class="toggle-btn" onclick="toggleContent(this)">Read more »</span>
+        </div>
+
+        <div class="card">
+            <h3>Award-Winning Faculty</h3>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf4mwxIUO2OYoX3Poq-g_DBtZOrneYQx4_AQ&s" alt="Award-Winning">
+            <time datetime="2025-02-10">February 10, 2025</time>
+            <p>Two of our esteemed professors received national recognition for their contributions in Education.</p>
+            <div class="hidden-content">
+                <p>Professors Johnson and Perez helped develop literacy programs for underserved communities.</p>
+            </div>
+            <span class="toggle-btn" onclick="toggleContent(this)">Read more »</span>
+        </div>
+    </div>
+        <h2>Upcoming Events</h2>
+<hr>
+        <div class="ne-container">
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvHF5xeFLLZJvQxXYmORxwsxqWODGlsvtuTg&s" alt="Spring Festival">
+                <h3>Spring Festival</h3>
+                <time datetime="2025-03-15">March 15 - March 17, 2025</time>
+                <p>Celebrate the semester with live music, cultural performances, and great food.</p>
+                <div class="hidden-content">
+                    <p>The Spring Festival, also known as the Chinese New Year, is a vibrant and joyous celebration marking the beginning of the lunar new year. It is a time for families to come together, share meals, and honor their ancestors. Homes are adorned with red lanterns, couplets, and paper cuttings symbolizing good fortune. Special dishes like dumplings, fish, and rice cakes are prepared, each carrying symbolic meanings of prosperity and luck. The skies light up with fireworks, and lion dances are performed to ward off evil spirits and bring good luck. Elders give red envelopes filled with money to children, symbolizing blessings and good wishes for the new year. Overall, the Spring Festival is a time of renewal, joy, and hope for the future.</p>
+                </div>
+                <span class="toggle-btn" onclick="toggleContent(this)">Learn more »</span>
+            </div>
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf1MFCfG2BtMju9l9dVojxPgwo6VblVvwRug&s" alt="Networking Fair">
+                <h3>Industry Networking Fair</h3>
+                <time datetime="2025-03-25">March 25, 2025</time>
+                <p>Meet top employers and discover internship and job opportunities.</p>
+                <a href="/Register">Register »</a>
+            </div>
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGadNg_n90uBm1tcH9sCbrkIjklXbnestHHw&s" alt="Open House">
+                <h3>Open House</h3>
+                <time datetime="2025-04-05">April 5, 2025</time>
+                <p>Tour the campus, meet faculty, and learn about programs and scholarships.</p>
+                <a href="/Login">Sign up »</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleContent(button) {
+            let content = button.previousElementSibling;
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                button.textContent = "Read less «";
+            } else {
+                content.style.display = "none";
+                button.textContent = "Read more »";
+            }
+        }
+    </script>
+    <footer>
+        <p>&copy; 2024 University of Auckland</p>
+    </footer>
+</body>
+</html>

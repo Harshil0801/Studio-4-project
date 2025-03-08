@@ -22,7 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', function(req, res) {
 	res.render("home"); // Render home page
 });
-
+app.get('/Newspage', function(req, res) {
+	res.render("Newspage.ejs"); // Render home page
+});
 app.get('/Student',function(req,res){
 	res.render('Student.ejs'); // Render login page
    });

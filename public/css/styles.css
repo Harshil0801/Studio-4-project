@@ -198,7 +198,11 @@ header {
 .top-bar a {
     color: #ffcc00;
 }
-
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 nav ul {
     list-style: none;
     padding: 0;
@@ -458,4 +462,10 @@ section p {
 
 .search-bar button:hover {
     color: #004d99; /* Icon hover color */
+}
+footer {
+  background: #002040;
+  color: white;
+  padding: 10px;
+  margin-top: 20px;
 }
