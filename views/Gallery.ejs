@@ -9,6 +9,96 @@
     <title>Gallery</title>
     <!-- CSS styles for Gallery -->
     <style>
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
+    background: var(--primary-color);
+    padding: 15px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  }
+  nav {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 15px; /* Smaller rounded corners */
+    padding: 3px 8px; /* Reduced padding */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 180px; /* Smaller width */
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 5px; /* Reduced padding */
+    flex: 1; /* Takes up remaining space */
+    font-size: 12px; /* Smaller font size */
+    background: transparent;
+}
+
+.search-bar input::placeholder {
+    color: #999; /* Placeholder text color */
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px; /* Reduced padding */
+    color: #0066cc; /* Icon color */
+    font-size: 14px; /* Smaller icon size */
+    font-weight: bold; /* Make the "Q" bold */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem; /* Adjust spacing */
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+nav ul li {
+  display: flex;
+  align-items: center;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 5px 10px;
+  width: 200px;
+}
+.search-bar button:hover {
+    color: #004d99; /* Icon hover color */
+}
+  nav a {
+    text-decoration: none;
+    color: var(--white);
+    font-weight: bold;
+    padding: 12px 25px;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    border-radius: 8px;
+  }
         /* CSS styles for Gallery */
         body {
             font-family: Arial, sans-serif;
@@ -37,11 +127,6 @@
 
     <div class="main-content">
         <div class="container">
-            <!-- Logo and college name -->
-            <div class="logo-container">
-                <img src="/public/css/images/logo.png" alt="logo" class="logo">
-                <h1 id="headerid"> NZ COLLEGE OF EDUCATION AUCKLAND</h1>
-            </div>
             <%- include ('partials/navbar1.ejs') %>
         </div>
         
