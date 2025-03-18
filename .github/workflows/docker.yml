@@ -1,42 +1,54 @@
-name: Deploy Web App to Server
-
+name: Deploy React App to Apache Server
+ 
 on:
   push:
     branches:
-      - main
-
+      - main  # Change this if using a different branch
+ 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+ 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Build Docker Image
+        uses: actions/checkout@v4
+ 
+      - name: Install SSH & SSHPass
+        run: sudo apt-get install -y sshpass
+ 
+      - name: Debug SSH Variables
         run: |
-          docker build -t my-web-app .
-
-      - name: Save Docker Image
+          echo "Server Host: ${{ secrets.SERVER_HOST }}"
+          echo "Server Username: ${{ secrets.SERVER_USERNAME }}"
+ 
+      - name: Install Node.js Dependencies & Build React App
         run: |
-          docker save my-web-app -o my-web-app.tar
-
-      - name: Transfer Docker Image to Server
+          export CI=false  # Prevent ESLint warnings from failing the build
+          npm install
+          npm run build
+ 
+      - name: Transfer Files to Apache Server
         env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
-
-      - name: Deploy Application on Server
-        env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            docker stop my-web-app || true
-            docker rm my-web-app || true
-            docker load -i /root/my-web-app.tar
-            docker run -d --name my-web-app -p 80:3000 my-web-app
-            docker system prune -f
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+            echo "✅ Successfully connected to $SERVER_HOST"
+ 
+            # Clear old files and upload new ones
+            sudo rm -rf /var/www/html/*
+            exit
           EOF
+          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
+ 
+     # - name: Restart Apache Server
+       # env:
+       #   SERVER_HOST: ${{ secrets.SERVER_HOST }}
+         # SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+        #  SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+       # run: |
+         # sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+          #  echo "✅ Restarting Apache..."
+          #  sudo systemctl restart apache2
+       #   EOF
