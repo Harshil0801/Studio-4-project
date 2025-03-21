@@ -19,26 +19,22 @@ jobs:
       - name: Debug SSH Variables
         run: |
           echo "Server Host: ${{ secrets.SERVER_HOST }}"
-          echo "Server Username: ${{ secrets.SERVER_USERNAME }}"
+          echo "Server Username: ${{ secrets.SERVER_USER }}"
 
       - name: Install Node.js Dependencies & Build React App
         run: |
-          export CI=false  # Prevent ESLint warnings from failing the build
           npm install
           npm run build
 
       - name: Serve React App for ZAP Scan
         run: |
           npx serve -s build -l 3000 &
-          sleep 10  # Allow some time for the server to start
+          sleep 15  # Wait to ensure the app is up
 
       - name: Run OWASP ZAP Scan (Security Check)
-        uses: zaproxy/action-full-scan@v0.1.0
+        uses: zaproxy/action-full-scan@v0.10.0
         with:
-          target: 'http://localhost:3000'  # Ensure the React app is running on this URL
-          docker_name: owasp/zap2docker-stable:latest
-        env:
-          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Ensure you have your ZAP API key stored in secrets
+          target: 'http://localhost:3000'
 
       - name: Transfer Files to Apache Server
         env:
@@ -47,11 +43,9 @@ jobs:
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
-            echo "✅ Successfully connected to $SERVER_HOST"
-            
-            # Clear old files and upload new ones
+            echo "✅ Connected to $SERVER_HOST"
             sudo rm -rf /var/www/html/*
             exit
-           EOF
+EOF
 
            sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
