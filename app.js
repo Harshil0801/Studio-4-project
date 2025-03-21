@@ -67,6 +67,30 @@ app.get('/admin', function(req, res) {
     });
 });
 
+app.post('/contact', function(req, res) {
+    const { name, email, message } = req.body;
+
+    // Log received data to check if it's being sent correctly
+    console.log("Received Contact Data:", { name, email, message });
+
+    // Check if all fields are provided
+    if (!name || !email || !message) {
+        return res.status(400).send("All fields are required!");
+    }
+
+    // Insert data into the `contactus` table
+    const sql = 'INSERT INTO contactus (name, email, comment) VALUES (?, ?, ?)';
+    conn.query(sql, [name, email, message], function(error, result) {
+        if (error) {
+            console.error("Error saving contact form:", error);
+            return res.status(500).send("Database error occurred!");
+        }
+        console.log("Message submitted successfully:", result);
+        res.send("Your message has been submitted successfully!");
+    });
+});
+
+
 // Faculty Dashboard
 app.get('/facultydashboard', function(req, res) {
     if (req.session.loggedin && req.session.role === 'teacher') {

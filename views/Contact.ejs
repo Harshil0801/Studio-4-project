@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Include header partial -->
     <%- include('partials/header.ejs') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - NZ College of Education</title>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e6ecff, #f9fbff);
             color: #333;
         }
 
-        .header {
-            background-color: #0044cc;
-            color: #fff;
+        /* Navbar */
+        .navbar-container {
+            background-color: #003366;
             padding: 10px 0;
+            text-align: center;
         }
 
-        .header .container {
+        .main-section {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .main-content {
             padding: 40px 20px;
         }
 
@@ -34,150 +33,126 @@
         }
 
         .logo {
-            width: 120px;
+            width: 100px;
             height: auto;
-            margin-bottom: 20px;
         }
 
-        h1#headerid {
+        .college-name {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #333;
+            color: #003366;
+            margin-top: 10px;
         }
 
-        /* News Marquee */
-        marquee {
-            font-size: 1.2rem;
-            color: #fff;
-            background-color: #f7b731;
-            padding: 5px 0;
-        }
-
-        /* Navbar Styles */
-        nav {
-            text-align: center;
-            margin-top: 20px;
-            background-color: #2c3e50;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.2rem;
-        }
-
-        nav a:hover {
-            color: #f7b731;
-        }
-
-        .contact-form {
+        .contact-wrapper {
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .contact-form h2 {
-            text-align: center;
-            color: #333;
-            font-size: 2rem;
-        }
-
-        .contact-form label {
-            display: block;
-            font-size: 1.1rem;
-            margin: 10px 0 5px;
-            color: #555;
-        }
-
-        .contact-form input, .contact-form textarea {
+            max-width: 650px;
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
+            padding: 30px 40px;
+            margin-top: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
         }
 
-        .contact-form button {
+        .contact-wrapper h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #004080;
+            font-size: 1.8rem;
+        }
+
+        .contact-wrapper label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .contact-wrapper input,
+        .contact-wrapper textarea {
             width: 100%;
             padding: 12px;
-            background-color: #0044cc;
-            color: white;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
         }
 
-        .contact-form button:hover {
-            background-color: #f7b731;
+        .contact-wrapper input::placeholder,
+        .contact-wrapper textarea::placeholder {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .contact-wrapper textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .contact-wrapper button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(to right, #0066cc, #004080);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .contact-wrapper button:hover {
+            background: linear-gradient(to right, #004080, #00264d);
         }
 
         footer {
-            background-color: #2c3e50;
-            color: #fff;
+            margin-top: 50px;
             padding: 15px 0;
+            background-color: #003366;
             text-align: center;
-            font-size: 1rem;
-            margin-top: 40px;
+            color: white;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="container">
-        <!-- Display news updates -->
-        <b>NEWS:</b>
-        <marquee>
-            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments.
-        </marquee>
-    </div>
-</div>
-
-<div class="main-content">
-    <div class="container">
-        <!-- Logo and college name -->
-        <div class="logo-container">
-            <img src="/public/css/images/logo.png" alt="logo" class="logo">
-            <h1 id="headerid">RD College of Education Auckland</h1>
-        </div>
-
-        <!-- Include navbar partial -->
+    <!-- Navbar at the Top -->
+    <div class="navbar-container">
         <%- include('partials/navbar1.ejs') %>
     </div>
-</div>
 
-<div class="main-content">
-    <div class="container">
-        <!-- Contact form section -->
-        <div class="contact-form">
+    <!-- Main Content -->
+    <div class="main-section">
+
+        <!-- Logo and College Name -->
+        <div class="logo-container">
+            <img src="/public/css/images/logo.png" alt="NZ College Logo" class="logo">
+            <h1 class="college-name">NZ College of Education</h1>
+        </div>
+
+        <!-- Contact Form Section -->
+        <div class="contact-wrapper">
             <h2>Contact Us</h2>
-            <!-- Form for contacting -->
             <form action="/contact" method="POST">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
 
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required></textarea>
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
 
                 <button type="submit">Send Message</button>
             </form>
         </div>
     </div>
-</div>
 
-<!-- Include footer partial -->
-<%- include('partials/footer.ejs') %>
+    <!-- Footer -->
+    <%- include('partials/footer.ejs') %>
 
 </body>
 </html>
