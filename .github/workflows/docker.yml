@@ -27,10 +27,16 @@ jobs:
           npm install
           npm run build
 
+      - name: Serve React App for ZAP Scan
+        run: |
+          # Serve the app on port 3000
+          npx serve -s build -l 3000 &
+          sleep 10  # Allow some time for the server to start
+
       - name: Run OWASP ZAP Scan (Security Check)
         uses: zaproxy/action-full-scan@v0.1.0
         with:
-          target: 'http://localhost:3000'  # Replace with your app's URL if it's different
+          target: 'http://localhost:3000'  # Ensure the React app is running on this URL
         env:
           ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Ensure you have your ZAP API key stored in secrets
 
@@ -42,7 +48,7 @@ jobs:
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Successfully connected to $SERVER_HOST"
-
+            
             # Clear old files and upload new ones
             sudo rm -rf /var/www/html/*
             exit
