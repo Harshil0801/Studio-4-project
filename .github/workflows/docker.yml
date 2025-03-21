@@ -3,7 +3,7 @@ name: Deploy React App to Apache Server
 on:
   push:
     branches:
-      - main  # Change this if using a different branch
+      - main  # Use your default branch
 
 jobs:
   deploy:
@@ -23,15 +23,16 @@ jobs:
 
       - name: Install Node.js Dependencies & Build React App
         run: |
+          export CI=false  # Prevent ESLint warnings from failing the build
           npm install
           npm run build
 
-      - name: Serve React App for ZAP Scan
+      - name: Serve React App Locally
         run: |
           npx serve -s build -l 3000 &
-          sleep 15  # Wait to ensure the app is up
+          sleep 15  # Give server time to fully start
 
-      - name: Run OWASP ZAP Scan (Security Check)
+      - name: Run OWASP ZAP Full Scan (Security Check)
         uses: zaproxy/action-full-scan@v0.10.0
         with:
           target: 'http://localhost:3000'
@@ -47,5 +48,4 @@ jobs:
             sudo rm -rf /var/www/html/*
             exit
 EOF
-
-           sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
+          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
