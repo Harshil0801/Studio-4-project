@@ -27,6 +27,13 @@ jobs:
           npm install
           npm run build
 
+      - name: Run OWASP ZAP Scan (Security Check)
+        uses: zaproxy/action-full-scan@v0.1.0
+        with:
+          target: 'http://localhost:3000'  # Replace with your app's URL if it's different
+        env:
+          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Ensure you have your ZAP API key stored in secrets
+
       - name: Transfer Files to Apache Server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -36,9 +43,9 @@ jobs:
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Successfully connected to $SERVER_HOST"
 
-            #Clear old files and upload new ones
+            # Clear old files and upload new ones
             sudo rm -rf /var/www/html/*
             exit
            EOF
 
-           sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@SERVER_HOST:/var/www/html/
+           sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
