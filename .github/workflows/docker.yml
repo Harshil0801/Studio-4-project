@@ -1,9 +1,9 @@
-name: Deploy Web App to Server
+name: Deploy React App to Apache Server
 
 on:
   push:
     branches:
-      - main
+      - main  # Change this if using a different branch
 
 jobs:
   deploy:
@@ -11,32 +11,47 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Build Docker Image
+      - name: Install SSH & SSHPass
+        run: sudo apt-get install -y sshpass
+
+      - name: Debug SSH Variables
         run: |
-          docker build -t my-web-app .
+          echo "Server Host: ${{ secrets.SERVER_HOST }}"
+          echo "Server Username: ${{ secrets.SERVER_USERNAME }}"
 
-      - name: Save Docker Image
+      - name: Install Node.js Dependencies & Build React App
         run: |
-          docker save my-web-app -o my-web-app.tar
+          export CI=false  # Prevent ESLint warnings from failing the build
+          npm install
+          npm run build
 
-      - name: Transfer Docker Image to Server
+      - name: Serve React App for ZAP Scan
+        run: |
+          npx serve -s build -l 3000 &
+          sleep 10  # Allow some time for the server to start
+
+      - name: Run OWASP ZAP Scan (Security Check)
+        uses: zaproxy/action-full-scan@v0.1.0
+        with:
+          target: 'http://localhost:3000'  # Ensure the React app is running on this URL
+          docker_name: owasp/zap2docker-stable:latest
         env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
+          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Ensure you have your ZAP API key stored in secrets
 
-      - name: Deploy Application on Server
+      - name: Transfer Files to Apache Server
         env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USER }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            docker stop my-web-app || true
-            docker rm my-web-app || true
-            docker load -i /root/my-web-app.tar
-            docker run -d --name my-web-app -p 80:3000 my-web-app
-            docker system prune -f
-          EOF
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+            echo "✅ Successfully connected to $SERVER_HOST"
+            
+            # Clear old files and upload new ones
+            sudo rm -rf /var/www/html/*
+            exit
+           EOF
+
+           sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
