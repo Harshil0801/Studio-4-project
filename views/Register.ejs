@@ -3,25 +3,21 @@
 <head>
     <%- include('partials/header.ejs') %>
     <style>
-        /* Custom header style */
         #headerid {
-            font-size: 66px; /* Adjust the size as needed */
-            color: #4A90E2; /* Add your desired color */
+            font-size: 66px;
+            color: #4A90E2;
         }
 
-        /* Styling for the container */
         .container {
             width: 80%;
             margin: 0 auto;
         }
 
-        /* Main content background */
         .main-content {
             background-color: #f4f4f4;
             padding: 20px 0;
         }
 
-        /* Form styling */
         .container-form {
             background-color: #fff;
             padding: 30px;
@@ -31,7 +27,7 @@
             margin: 0 auto;
         }
 
-        .container-form input {
+        .container-form input, .container-form select {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -87,10 +83,14 @@
         a:hover {
             text-decoration: underline;
         }
+
+        #courseDropdown {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- Header Section -->
+    <!-- Header -->
     <div class="header">
         <div class="container">
             <img src="/public/css/images/logo.png" alt="logo" class="logo">  
@@ -98,36 +98,52 @@
         </div>
     </div>
 
-    <!-- Main Content Section -->
+    <!-- Main Content -->
     <div class="main-content">
         <div class="container">
-            <!-- Logo and Header -->
             <div class="logo-container">
                 <h1 id="headerid">RD College of Education Auckland</h1>
             </div>
-            <!-- Navbar -->
-            <!-- Navbar is included above -->
         </div>
     </div>
 
-    <!-- Student Registration Form Section -->
+    <!-- Registration Form -->
     <div class="container-form">
-        <h2>Student Registration</h2>
+        <h2>Register</h2>
         <form action="/register" method="POST">
-            <!-- Username input -->
-            <input type="text" name="username" placeholder="Username" required><br>
-            <!-- Email input -->
-            <input type="email" name="email" placeholder="Email" required><br>
-            <!-- Password input -->
-            <input type="password" name="password" placeholder="Password" required><br>
-            <!-- Register button -->
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <label for="role">Select Role:</label>
+            <select name="role" id="roleSelect" onchange="toggleCourseDropdown()" required>
+                <option value="">-- Select Role --</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+
+            <div id="courseDropdown">
+                <label for="courseId">Select Course:</label>
+                <select name="courseId">
+                    <% courses.forEach(course => { %>
+                        <option value="<%= course.id %>"><%= course.course_name %></option>
+                    <% }) %>
+                </select>
+            </div>
+
             <button type="submit">Register</button>
         </form>
-        <!-- Link to login page -->
         <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
 
-    <!-- Footer Section -->
     <%- include('partials/footer.ejs') %>
+
+    <script>
+        function toggleCourseDropdown() {
+            const role = document.getElementById("roleSelect").value;
+            const courseDropdown = document.getElementById("courseDropdown");
+            courseDropdown.style.display = role === "student" ? "block" : "none";
+        }
+    </script>
 </body>
 </html>

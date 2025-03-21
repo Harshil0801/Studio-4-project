@@ -31,6 +31,9 @@ app.post('/auth', function(req, res) {
             if (error) throw error;
             if (results.length > 0) {
                 if (results[0].status === 'blocked') return res.send("Your account has been blocked. Contact admin.");
+                if (results[0].role === 'teacher' && results[0].status === 'pending') {
+                    return res.send("Your request is still pending approval by the admin.");
+                }
                 req.session.loggedin = true;
                 req.session.username = username;
                 req.session.role = results[0].role;
@@ -67,45 +70,36 @@ app.get('/admin', function(req, res) {
     });
 });
 
-app.post('/contact', function(req, res) {
-    const { name, email, message } = req.body;
-
-    // Log received data to check if it's being sent correctly
-    console.log("Received Contact Data:", { name, email, message });
-
-    // Check if all fields are provided
-    if (!name || !email || !message) {
-        return res.status(400).send("All fields are required!");
-    }
-
-    // Insert data into the `contactus` table
-    const sql = 'INSERT INTO contactus (name, email, comment) VALUES (?, ?, ?)';
-    conn.query(sql, [name, email, message], function(error, result) {
-        if (error) {
-            console.error("Error saving contact form:", error);
-            return res.status(500).send("Database error occurred!");
-        }
-        console.log("Message submitted successfully:", result);
-        res.send("Your message has been submitted successfully!");
+app.post('/admin/approveTeacher', function(req, res) {
+    const { userId } = req.body;
+    conn.query('UPDATE users SET status = "unblocked" WHERE id = ?', [userId], function(err) {
+        if (err) return res.status(500).send("Error updating status");
+        res.redirect('/admin');
     });
 });
 
-
-// Faculty Dashboard
+// Faculty Dashboard (Only after admin approval)
 app.get('/facultydashboard', function(req, res) {
     if (req.session.loggedin && req.session.role === 'teacher') {
-        const studentQuery = `
-            SELECT users.id, users.username, users.status, courses.course_name
-            FROM users
-            LEFT JOIN enrollments ON users.id = enrollments.student_id
-            LEFT JOIN courses ON enrollments.course_id = courses.id
-            WHERE users.role = 'student'
-        `;
-        conn.query(studentQuery, function(error, students) {
-            if (error) throw error;
-            conn.query('SELECT * FROM courses', function(error, courses) {
+        conn.query('SELECT status FROM users WHERE username = ?', [req.session.username], function(err, result) {
+            if (err) return res.status(500).send("Database error.");
+            if (!result.length || result[0].status !== 'unblocked') {
+                return res.send("Access denied. Your teacher registration is still pending admin approval.");
+            }
+
+            const studentQuery = `
+                SELECT users.id, users.username, users.status, courses.course_name
+                FROM users
+                LEFT JOIN enrollments ON users.id = enrollments.student_id
+                LEFT JOIN courses ON enrollments.course_id = courses.id
+                WHERE users.role = 'student'
+            `;
+            conn.query(studentQuery, function(error, students) {
                 if (error) throw error;
-                res.render('FacultyDashboard', { students, courses });
+                conn.query('SELECT * FROM courses', function(error, courses) {
+                    if (error) throw error;
+                    res.render('FacultyDashboard', { students, courses });
+                });
             });
         });
     } else {
@@ -185,22 +179,43 @@ app.post('/admin/toggleBlock', function(req, res) {
 });
 
 // Register
-app.get('/Register', (req, res) => res.render('Register.ejs'));
+app.get('/Register', (req, res) => {
+    conn.query('SELECT * FROM courses', (error, results) => {
+        if (error) return res.status(500).send("Error loading registration page.");
+        res.render('Register', { courses: results });
+    });
+});
+
 app.post('/register', function(req, res) {
-    const { username, email, password } = req.body;
-    if (username && email && password) {
-        conn.query('SELECT COUNT(*) AS count FROM users', function(err, result) {
-            if (err) throw err;
-            const role = (result[0].count === 0) ? 'admin' : 'user';
-            conn.query('INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
-            [username, email, password, role], function(err) {
-                if (err) throw err;
-                res.redirect('/login');
-            });
-        });
-    } else {
-        res.send("All fields are required!");
+    const { username, email, password, role, courseId } = req.body;
+
+    if (!username || !email || !password || !role) {
+        return res.send("All fields are required!");
     }
+
+    conn.query('SELECT COUNT(*) AS count FROM users', function(err, result) {
+        if (err) throw err;
+
+        const assignedRole = result[0].count === 0 ? 'admin' : role;
+        const status = (assignedRole === 'teacher') ? 'pending' : 'unblocked';
+
+        conn.query('INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)',
+        [username, email, password, assignedRole, status], function(err, userResult) {
+            if (err) throw err;
+
+            const userId = userResult.insertId;
+
+            if (assignedRole === 'student' && courseId) {
+                conn.query('INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)',
+                [userId, courseId], function(err) {
+                    if (err) throw err;
+                    res.redirect('/login');
+                });
+            } else {
+                res.redirect('/login');
+            }
+        });
+    });
 });
 
 // Members Only
