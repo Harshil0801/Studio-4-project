@@ -35,4 +35,10 @@ jobs:
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Successfully connected to $SERVER_HOST"
-          EOF
+
+            #Clear old files and upload new ones
+            sudo rm -rf /var/www/html/*
+            exit
+           EOF
+
+           sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@SERVER_HOST:/var/www/html/
