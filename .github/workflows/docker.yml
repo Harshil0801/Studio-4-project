@@ -26,7 +26,8 @@ jobs:
           export CI=false  # Prevent ESLint warnings from failing the build
           npm install
           npm run build
- - name: Transfer Files to Apache Server
+
+      - name: Transfer Files to Apache Server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
@@ -34,4 +35,4 @@ jobs:
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Successfully connected to $SERVER_HOST"
-          EOF
+          EOF
