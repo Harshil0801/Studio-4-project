@@ -1,9 +1,9 @@
-name: Deploy React App to Apache Server
+name: Deploy Express App with PM2
 
 on:
   push:
     branches:
-      - main  # Use your default branch
+      - main
 
 jobs:
   deploy:
@@ -19,34 +19,44 @@ jobs:
       - name: Debug SSH Variables
         run: |
           echo "Server Host: ${{ secrets.SERVER_HOST }}"
-          echo "Server Username: ${{ secrets.SERVER_USER }}"
-
-      - name: Install Node.js Dependencies & Build React App
-        run: |
-          export CI=false  # Prevent ESLint warnings from failing the build
-          npm install
-          npm run build
-
-      - name: Serve React App Locally
-        run: |
-          npx serve -s build -l 3000 &
-          sleep 15  # Give server time to fully start
-
-      - name: Run OWASP ZAP Full Scan (Security Check)
-        uses: zaproxy/action-full-scan@v0.10.0
-        with:
-          target: 'http://localhost:3000'
-
-      - name: Transfer Files to Apache Server
+          echo "Server Username: ${{ secrets.SERVER_USERNAME }}"
+      - name: Transfer Files to Server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USER }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
-            echo "✅ Connected to $SERVER_HOST"
-            # clear all files and add new ones
-            sudo rm -rf /var/www/html/*
+            echo "✅ Successfully connected to $SERVER_HOST"
+            # Ensure PM2 is installed globally
+            sudo npm install -g pm2 || true
+            # Navigate to project directory or create it
+            sudo mkdir -p /var/www/express-app
+            cd /var/www/express-app
+            # Stop the existing PM2 process only if it exists
+            npx pm2 stop subway-app || echo "PM2 process not running, skipping stop step"
+            # Remove old project files safely
+            sudo rm -rf /var/www/express-app/* || true
             exit
-EOF
-          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
+          EOF
+          # Securely copy new files from GitHub Actions to the server
+          sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USERNAME@$SERVER_HOST:/var/www/express-app/
+      - name: Install Dependencies and Restart App
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+            echo "🚀 Installing Dependencies and Restarting PM2..."
+            # Go to project folder
+            cd /var/www/express-app
+            # Install dependencies
+            npm install --production
+            # Start or restart the app with PM2
+            npx pm2 start app.js --name subway-app || npx pm2 restart subway-app
+            # Save PM2 process list to survive reboots
+            npx pm2 save
+            # Exit SSH session
+            exit
+          EOF
