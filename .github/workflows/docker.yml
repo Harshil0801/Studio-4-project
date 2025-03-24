@@ -45,6 +45,7 @@ jobs:
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Connected to $SERVER_HOST"
+            # clear all files and add new ones
             sudo rm -rf /var/www/html/*
             exit
 EOF
