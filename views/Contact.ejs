@@ -1,158 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('partials/header.ejs') %>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - NZ College of Education</title>
-
+   
+    <%- include ('partials/header.ejs') %>
+        <%- include ('partials/navbar1.ejs') %>
+        <link rel="stylesheet" href="/public/css/styles.css">
     <style>
         body {
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #e6ecff, #f9fbff);
-            color: #333;
+            padding: 0;
+            background: #f0f8ff;
         }
 
-        /* Navbar */
-        .navbar-container {
-            background-color: #003366;
-            padding: 10px 0;
+        .headers {
+            background-color: #00548f;
+            color: white;
             text-align: center;
+            padding: 40px 20px 30px;
         }
 
-        .main-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
+        .headers h1 {
+            margin: 0;
         }
 
-        .logo-container {
-            text-align: center;
+        .headers p {
+            margin-top: 8px;
+            letter-spacing: 1px;
         }
 
-        .logo {
-            width: 100px;
-            height: auto;
-        }
-
-        .college-name {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #003366;
-            margin-top: 10px;
-        }
-
-        .contact-wrapper {
+        .container {
+            max-width: 600px;
+            width: 90%;
             background-color: #ffffff;
-            max-width: 650px;
-            width: 100%;
+            margin: 40px auto;
             padding: 30px 40px;
-            margin-top: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .contact-wrapper h2 {
+        .container h2 {
             text-align: center;
             margin-bottom: 25px;
             color: #004080;
-            font-size: 1.8rem;
+            font-size: 24px;
         }
 
-        .contact-wrapper label {
+        label {
             display: block;
             margin-top: 15px;
-            font-weight: 600;
+            font-weight: bold;
         }
 
-        .contact-wrapper input,
-        .contact-wrapper textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 12px;
-            margin-top: 5px;
+            margin-top: 6px;
+            border-radius: 6px;
             border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
+            font-size: 15px;
             background-color: #f9f9f9;
+            transition: border 0.3s ease;
         }
 
-        .contact-wrapper input::placeholder,
-        .contact-wrapper textarea::placeholder {
-            color: #888;
-            font-size: 0.95rem;
+        input:focus,
+        textarea:focus {
+            border-color: #00548f;
+            outline: none;
         }
 
-        .contact-wrapper textarea {
+        textarea {
             resize: vertical;
             height: 120px;
         }
 
-        .contact-wrapper button {
+        button {
             width: 100%;
-            margin-top: 20px;
+            margin-top: 25px;
             padding: 14px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            background-color: #00548f;
             color: white;
-            background: linear-gradient(to right, #0066cc, #004080);
+            font-size: 16px;
+            font-weight: bold;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .contact-wrapper button:hover {
-            background: linear-gradient(to right, #004080, #00264d);
+        button:hover {
+            background-color: #003f73;
         }
 
         footer {
-            margin-top: 50px;
-            padding: 15px 0;
-            background-color: #003366;
-            text-align: center;
+            background-color: #00548f;
             color: white;
-            font-size: 0.9rem;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 1rem;
         }
-    </style>
+
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #f7b731;
+        }
+
+          </style>
 </head>
 <body>
 
-    <!-- Navbar at the Top -->
-    <div class="navbar-container">
-        <%- include('partials/navbar1.ejs') %>
+
+    <!-- Header Section -->
+    <div class="headers">
+        <h1>NZ COLLEGE OF EDUCATION</h1>
+        <p>WHERE EDUCATION MEETS EXCELLENCE</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-section">
+    <!-- Contact Form Section -->
+    <div class="container">
+        <h2>Contact Us</h2>
+        <form action="/contact" method="POST">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
 
-        <!-- Logo and College Name -->
-        <div class="logo-container">
-            <img src="/public/css/images/logo.png" alt="NZ College Logo" class="logo">
-            <h1 class="college-name">NZ College of Education</h1>
-        </div>
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
 
-        <!-- Contact Form Section -->
-        <div class="contact-wrapper">
-            <h2>Contact Us</h2>
-            <form action="/contact" method="POST">
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            <label for="message">Your Message:</label>
+            <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
 
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-
-                <label for="message">Your Message:</label>
-                <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
-
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
+            <button type="submit">Send Message</button>
+        </form>
     </div>
 
     <!-- Footer -->
-    <%- include('partials/footer.ejs') %>
+    <footer>
+        <p>&copy; 2025 NZ College of Education | <a href="/privacy-policy">Privacy Policy</a></p>
+    </footer>
 
 </body>
 </html>

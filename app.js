@@ -245,9 +245,23 @@ app.get('/course-details/:courseId', function(req, res) {
 // Contact
 app.get('/Contact', (req, res) => res.render('Contact', { title: 'My Contact' }));
 app.post('/contact', function(req, res) {
-    console.log('Contact:', req.body);
-    res.send('Your message has been received! Wait till your next life for reply!');
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).send("All fields are required!");
+    }
+
+    const sql = 'INSERT INTO contactus (name, email, comment) VALUES (?, ?, ?)';
+    conn.query(sql, [name, email, message], function(error, result) {
+        if (error) {
+            console.error("Error saving contact form:", error);
+            return res.status(500).send("Database error occurred!");
+        }
+        console.log("Message submitted successfully:", result);
+        res.send("Your message has been submitted successfully!");
+    });
 });
+
 
 // Gallery/About
 app.get('/Gallery', (req, res) => res.render('Gallery', { title: 'Gallery' }));
