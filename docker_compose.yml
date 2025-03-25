@@ -37,3 +37,25 @@ services:
 
 volumes:
   mysql_data:
+
+zap-scan:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Debug Environment
+        run: |
+          echo "Operating System: $(uname -a)"
+          echo "Runner Version: $RUNNER_VERSION"
+ 
+      # Install Docker using the official script to avoid dependency issues
+      - name: Install Docker
+        run: |
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+          docker --version
+ 
+      # Run OWASP ZAP Full Scan using the correct image
+      - name: Run OWASP ZAP Full Scan
+        run: |
+          docker pull zaproxy/zap-stable
+          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-full-scan.py -t http://${{ secrets.SERVER_HOST }}/ -a -I
