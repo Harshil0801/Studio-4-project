@@ -8,10 +8,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DB_HOST=mysql
-      - DB_USER=root
-      - DB_PASSWORD=yourpassword
-      - DB_NAME=yourdatabase
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: yourpassword
+      DB_NAME: yourdatabase
     depends_on:
       - mysql
 
@@ -35,27 +35,25 @@ services:
     depends_on:
       - mysql
 
+  zap:
+    image: zaproxy/zap-stable
+    volumes:
+      - ./zap-reports:/zap/wrk
+    command: >
+      zap.sh -daemon -host 0.0.0.0 -port 8081
+    ports:
+      - "8081:8081"
+    depends_on:
+      - app
+
+  zap-scan:
+    image: zaproxy/zap-stable
+    volumes:
+      - ./zap-reports:/zap/wrk
+    command: >
+      zap-full-scan.py -t http://${{ secrets.SERVER_HOST }}/ -a -I
+    depends_on:
+      - app
+
 volumes:
   mysql_data:
-
-zap-scan:
-    runs-on: ubuntu-latest
- 
-    steps:
-      - name: Debug Environment
-        run: |
-          echo "Operating System: $(uname -a)"
-          echo "Runner Version: $RUNNER_VERSION"
- 
-      # Install Docker using the official script to avoid dependency issues
-      - name: Install Docker
-        run: |
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
-          docker --version
- 
-      # Run OWASP ZAP Full Scan using the correct image
-      - name: Run OWASP ZAP Full Scan
-        run: |
-          docker pull zaproxy/zap-stable
-          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-full-scan.py -t http://${{ secrets.SERVER_HOST }}/ -a -I
