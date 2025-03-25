@@ -1,59 +1,128 @@
-version: '3.8'
+name: Deploy React App to Apache Server
+ 
+on:
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: yourpassword
-      DB_NAME: yourdatabase
-    depends_on:
-      - mysql
+  push:
 
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: yourpassword
-      MYSQL_DATABASE: yourdatabase
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+    branches:
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: yourpassword  # Same as MYSQL root password
-    ports:
-      - "8080:80"
-    depends_on:
-      - mysql
+      - main  # Change this to your target branch if needed
+ 
+jobs:
 
-  zap:
-    image: zaproxy/zap-stable
-    volumes:
-      - ./zap-reports:/zap/wrk
-    command: >
-      zap.sh -daemon -host 0.0.0.0 -port 8081
-    ports:
-      - "8081:8081"
-    depends_on:
-      - app
+  deploy:
 
+    name: 🚀 Deploy to Apache Server
+
+    runs-on: ubuntu-latest
+ 
+    steps:
+
+      - name: ⬇️ Checkout Repository
+
+        uses: actions/checkout@v4
+ 
+      - name: 🔧 Install SSH & SSHPass
+
+        run: sudo apt-get install -y sshpass
+ 
+      - name: 📦 Install Dependencies & Build React App
+
+        run: |
+
+          export CI=false  # Prevent ESLint warnings from failing the build
+
+          npm install
+
+          npm run build
+ 
+      - name: 🚚 Transfer Files to Apache Server
+
+        env:
+
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+
+        run: |
+
+          echo "Connecting to $SERVER_HOST..."
+
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+
+            echo "✅ Connected to server. Cleaning old files..."
+
+            sudo rm -rf /var/www/html/*
+
+            exit
+
+          EOF
+ 
+          echo "📤 Uploading new build files..."
+
+          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
+ 
+      # - name: 🔁 (Optional) Restart Apache Server
+
+      #   if: always()
+
+      #   env:
+
+      #     SERVER_HOST: ${{ secrets.SERVER_HOST }}
+
+      #     SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+
+      #     SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+
+      #   run: |
+
+      #     sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+
+      #       echo "🔁 Restarting Apache..."
+
+      #       sudo systemctl restart apache2
+
+      #       exit
+
+      #     EOF
+ 
   zap-scan:
-    image: zaproxy/zap-stable
-    volumes:
-      - ./zap-reports:/zap/wrk
-    command: >
-      zap-full-scan.py -t http://${{ secrets.SERVER_HOST }}/ -a -I
-    depends_on:
-      - app
 
-volumes:
-  mysql_data:
+    name: 🛡️ OWASP ZAP Security Scan
+
+    runs-on: ubuntu-latest
+
+    needs: deploy  # Waits for deploy job to finish
+ 
+    steps:
+
+      - name: 🖥️ Debug Environment Info
+
+        run: |
+
+          echo "OS Info: $(uname -a)"
+
+          echo "Runner Version: $RUNNER_VERSION"
+ 
+      - name: 🐳 Install Docker
+
+        run: |
+
+          curl -fsSL https://get.docker.com -o get-docker.sh
+
+          sudo sh get-docker.sh
+
+          docker --version
+ 
+      - name: 🔎 Run OWASP ZAP Full Scan
+
+        run: |
+
+          docker pull zaproxy/zap-stable
+
+          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-full-scan.py \
+
+            -t http://${{ secrets.SERVER_HOST }}/ -a -I
+ 
