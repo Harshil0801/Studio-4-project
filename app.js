@@ -231,10 +231,6 @@ app.get('/funding', (req, res) => {
     res.render('studyOptions');
   });
   
-  app.get('/courses', (req, res) => {
-    res.render('chooseCourse');
-  });
-  
 
 // Courses
 app.get('/Courses', function(req, res) {
