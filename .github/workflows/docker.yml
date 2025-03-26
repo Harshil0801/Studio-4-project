@@ -47,5 +47,4 @@ jobs:
             echo "✅ Connected to $SERVER_HOST"
             sudo rm -rf /var/www/html/*
             exit
-EOF
-          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
+
