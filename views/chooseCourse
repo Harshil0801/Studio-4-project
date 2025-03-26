@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/header') %>
+    <title>Choose a Course | NZ College of Education</title>
+</head>
+<body>
+    <%- include('partials/navbar1') %>
+
+    <main class="container">
+        <h1>Choose the Right Course for You</h1>
+        <p>Explore over 150+ qualifications in diverse fields including business, technology, education, health, and creative arts.</p>
+
+        <h3>Popular Courses</h3>
+        <ul>
+            <li>Diploma in Early Childhood Education</li>
+            <li>Certificate in Web Development</li>
+            <li>Bachelor of Business Administration</li>
+            <li>Health & Wellness Certificate</li>
+        </ul>
+
+        <a href="/" class="cta-button">← Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 NZ College of Education Auckland</p>
+    </footer>
+</body>
+</html>

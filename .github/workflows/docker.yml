@@ -1,9 +1,10 @@
-name: Deploy React App to Apache Server
+
+name: Deploy Web App to Server
 
 on:
   push:
     branches:
-      - main  # Use your default branch
+      - main
 
 jobs:
   deploy:
@@ -11,34 +12,23 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Install SSH & SSHPass
-        run: sudo apt-get install -y sshpass
-
-      - name: Debug SSH Variables
+      - name: Build Docker Image
         run: |
-          echo "Server Host: ${{ secrets.SERVER_HOST }}"
-          echo "Server Username: ${{ secrets.SERVER_USER }}"
-
-      - name: Install Node.js Dependencies & Build React App
+          docker build -t my-web-app .
+      - name: Save Docker Image
         run: |
-          export CI=false  # Prevent ESLint warnings from failing the build
-          npm install
-          npm run build
-
-      - name: Serve React App Locally
-        run: |
-          npx serve -s build -l 3000 &
-          sleep 15  # Give server time to fully start
-
-      - name: Run OWASP ZAP Full Scan (Security Check)
-        uses: zaproxy/action-full-scan@v0.10.0
-        with:
-          target: 'http://localhost:3000'
-
-      - name: Transfer Files to Apache Server
+          docker save my-web-app -o my-web-app.tar
+      - name: Transfer Docker Image to Server
         env:
+          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
+      - name: Deploy Application on Server
+        env:
+
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
@@ -47,4 +37,16 @@ jobs:
             echo "✅ Connected to $SERVER_HOST"
             sudo rm -rf /var/www/html/*
             exit
+
+
+          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+            docker stop my-web-app || true
+            docker rm my-web-app || true
+            docker load -i /root/my-web-app.tar
+            docker run -d --name my-web-app -p 80:3000 my-web-app
+            docker system prune -f
+          EOF
 
