@@ -167,8 +167,8 @@ app.post('/admin/changeRole', function(req, res) {
 // Admin Add/Delete Courses
 app.post('/admin/addCourse', function(req, res) {
     if (!req.session.loggedin || req.session.role !== 'admin') return res.send("Access denied.");
-    const { course_name, description, fee } = req.body;
-    conn.query('INSERT INTO courses (course_name, description, fee) VALUES (?, ?, ?)', [course_name, description, fee], function(error) {
+    const { course_name, description, fee_amount } = req.body;
+    conn.query('INSERT INTO courses (course_name, description, fee_amount) VALUES (?, ?, ?)', [course_name, description, fee_amount], function(error) {
         if (error) return res.status(500).send("Database error");
         res.redirect('/admin');
     });
@@ -194,7 +194,6 @@ app.post('/admin/toggleBlock', function(req, res) {
     });
 });
 
-// Register
 // Register
 app.get('/Register', (req, res) => {
     conn.query('SELECT * FROM courses', (error, results) => {
