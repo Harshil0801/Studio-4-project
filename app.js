@@ -126,8 +126,8 @@ app.get('/facultydashboard', function(req, res) {
 // Faculty Add Course
 app.post('/faculty/addCourse', function(req, res) {
     if (!req.session.loggedin || req.session.role !== 'teacher') return res.status(403).send("Unauthorized!");
-    const { course_name, description } = req.body;
-    conn.query('INSERT INTO courses (course_name, description) VALUES (?, ?)', [course_name, description], function(error) {
+    const { course_name, description, fee } = req.body;
+    conn.query('INSERT INTO courses (course_name, description, fee) VALUES (?, ?, ?)', [course_name, description, fee], function(error) {
         if (error) return res.status(500).send("Database error");
         res.redirect('/facultydashboard');
     });
@@ -167,8 +167,8 @@ app.post('/admin/changeRole', function(req, res) {
 // Admin Add/Delete Courses
 app.post('/admin/addCourse', function(req, res) {
     if (!req.session.loggedin || req.session.role !== 'admin') return res.send("Access denied.");
-    const { course_name, description } = req.body;
-    conn.query('INSERT INTO courses (course_name, description) VALUES (?, ?)', [course_name, description], function(error) {
+    const { course_name, description, fee } = req.body;
+    conn.query('INSERT INTO courses (course_name, description, fee) VALUES (?, ?, ?)', [course_name, description, fee], function(error) {
         if (error) return res.status(500).send("Database error");
         res.redirect('/admin');
     });
@@ -293,35 +293,58 @@ app.post('/contact', function(req, res) {
 // Fee Deduction Page
 app.get('/fee-deduction', (req, res) => {
     const studentId = req.query.studentId;
-    res.render('feeDeduction', { studentId });
-});
 
-// Handle Fee Payment
+    const sql = `
+        SELECT c.fee_amount 
+        FROM enrollments e
+        JOIN courses c ON e.course_id = c.id
+        WHERE e.student_id = ?
+    `;
+
+    conn.query(sql, [studentId], (err, result) => {
+        if (err || result.length === 0) {
+            console.error(err);
+            return res.status(500).send("Could not fetch course fee.");
+        }
+
+        const courseFee = result[0].fee_amount;
+        res.render('feeDeduction', { studentId, feeAmount: courseFee });
+
+    });
+});
 // Handle Fee Payment
 app.post('/pay-fee', (req, res) => {
     const { studentId, amount } = req.body;
 
+    const studentIdNum = parseInt(studentId); // Ensure ID is a number
+
+    console.log("💳 Fee being paid by studentId:", studentIdNum, "Amount:", amount);
+
     const feeSql = `INSERT INTO fees (student_id, amount, paid_at) VALUES (?, ?, NOW())`;
-    conn.query(feeSql, [studentId, amount], (err, result) => {
+    conn.query(feeSql, [studentIdNum, amount], (err, result) => {
         if (err) {
-            console.error("Error inserting into fees table:", err);
+            console.error("❌ Error inserting into fees table:", err);
             return res.status(500).send("❌ Fee payment failed.");
         }
 
-        // ✅ Mark fee as paid in the users table
+        // Mark fee as paid in users table
         const updateSql = `UPDATE users SET fee_paid = 1 WHERE id = ?`;
-        conn.query(updateSql, [studentId], (err, updateResult) => {
+        conn.query(updateSql, [studentIdNum], (err, updateResult) => {
             if (err) {
-                console.error("Error updating fee_paid:", err);
+                console.error("❌ Error updating fee_paid:", err);
                 return res.status(500).send("❌ Fee status update failed.");
             }
 
-            console.log("✅ Fee paid and user updated:", studentId);
+            if (updateResult.affectedRows === 0) {
+                console.warn("⚠️ No matching student found to update fee.");
+                return res.status(404).send("Student not found.");
+            }
+
+            console.log("✅ Fee paid and user updated:", studentIdNum);
             res.send("✅ Fee paid successfully. You are now fully registered and can login.");
         });
     });
 });
-
 
 // Gallery/About
 app.get('/Gallery', (req, res) => res.render('Gallery', { title: 'Gallery' }));
