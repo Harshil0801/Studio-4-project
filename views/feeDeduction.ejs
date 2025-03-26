@@ -43,12 +43,33 @@
 </head>
 <body>
   <div class="fee-box">
-    <h2>Fee Deduction</h2>
-    <form action="/pay-fee" method="POST">
-        <input type="hidden" name="studentId" value="<%= studentId %>">
-        <input type="number" name="amount" placeholder="Enter Fee Amount" required>
-        <button type="submit">Pay Fee</button>
-      </form>
+    <h2>Pay Your Course Fee</h2>
+<p>Course Fee: <strong>$<%= feeAmount %></strong></p>
+
+<form action="/pay-fee" method="POST">
+  <input type="hidden" name="studentId" value="<%= studentId %>">
+  <input type="hidden" name="amount" value="<%= feeAmount %>">
+
+  <!-- Card Holder Name -->
+  <label for="cardHolder">Card Holder Name:</label>
+  <input type="text" id="cardHolder" name="cardHolder" required>
+
+  <!-- Card Number -->
+  <label for="cardNumber">Card Number:</label>
+  <input type="text" id="cardNumber" name="cardNumber" maxlength="16" pattern="\d{16}" placeholder="1234 5678 9012 3456" required>
+
+  <!-- Expiry -->
+  <label for="expiry">Expiry Date:</label>
+  <input type="month" id="expiry" name="expiry" required>
+
+  <!-- CVV -->
+  <label for="cvv">CVV:</label>
+  <input type="text" id="cvv" name="cvv" maxlength="3" pattern="\d{3}" required>
+
+  <!-- Submit -->
+  <button type="submit">Pay $<%= feeAmount %></button>
+</form>
+
       
   </div>
 </body>
