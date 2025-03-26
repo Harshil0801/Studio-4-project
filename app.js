@@ -24,21 +24,37 @@ app.get('/login', (req, res) => res.render('login.ejs'));
 
 // Authentication
 app.post('/auth', function(req, res) {
-    let username = req.body.username;
-    let password = req.body.password;
+    const { username, password } = req.body;
+
     if (username && password) {
         conn.query('SELECT * FROM users WHERE username=? AND password=?', [username, password], function(error, results) {
             if (error) throw error;
+
             if (results.length > 0) {
-                if (results[0].status === 'blocked') return res.send("Your account has been blocked. Contact admin.");
-                if (results[0].role === 'teacher' && results[0].status === 'pending') {
-                    return res.send("Your request is still pending approval by the admin.");
+                const user = results[0];
+
+                // Blocked user
+                if (user.status === 'blocked') {
+                    return res.send("❌ Your account has been blocked. Contact admin.");
                 }
+
+                // Pending teacher
+                if (user.role === 'teacher' && user.status === 'pending') {
+                    return res.send("⏳ Your request is still pending approval by the admin.");
+                }
+
+                // ⛔ Unpaid student check (only applies to students)
+                if (user.role === 'student' && user.fee_paid === 0) {
+                    return res.send("💳 Please pay your fee before logging in.");
+                }
+
+                // ✅ Valid Login
                 req.session.loggedin = true;
                 req.session.username = username;
-                req.session.role = results[0].role;
-                if (req.session.role === 'admin') return res.redirect('/admin');
-                if (req.session.role === 'teacher') return res.redirect('/facultydashboard');
+                req.session.role = user.role;
+
+                if (user.role === 'admin') return res.redirect('/admin');
+                if (user.role === 'teacher') return res.redirect('/facultydashboard');
                 return res.redirect('/membersOnly');
             } else {
                 res.send('Incorrect Username and/or Password!');
@@ -179,6 +195,7 @@ app.post('/admin/toggleBlock', function(req, res) {
 });
 
 // Register
+// Register
 app.get('/Register', (req, res) => {
     conn.query('SELECT * FROM courses', (error, results) => {
         if (error) return res.status(500).send("Error loading registration page.");
@@ -209,7 +226,9 @@ app.post('/register', function(req, res) {
                 conn.query('INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)',
                 [userId, courseId], function(err) {
                     if (err) throw err;
-                    res.redirect('/login');
+
+                    // Redirect to fee deduction page after enrollment
+                    return res.redirect(`/fee-deduction?studentId=${userId}`);
                 });
             } else {
                 res.redirect('/login');
@@ -217,6 +236,7 @@ app.post('/register', function(req, res) {
         });
     });
 });
+
 
 // Members Only
 app.get('/membersOnly', function (req, res) {
@@ -267,6 +287,38 @@ app.post('/contact', function(req, res) {
         }
         console.log("Message submitted successfully:", result);
         res.send("Your message has been submitted successfully!");
+    });
+});
+
+// Fee Deduction Page
+app.get('/fee-deduction', (req, res) => {
+    const studentId = req.query.studentId;
+    res.render('feeDeduction', { studentId });
+});
+
+// Handle Fee Payment
+// Handle Fee Payment
+app.post('/pay-fee', (req, res) => {
+    const { studentId, amount } = req.body;
+
+    const feeSql = `INSERT INTO fees (student_id, amount, paid_at) VALUES (?, ?, NOW())`;
+    conn.query(feeSql, [studentId, amount], (err, result) => {
+        if (err) {
+            console.error("Error inserting into fees table:", err);
+            return res.status(500).send("❌ Fee payment failed.");
+        }
+
+        // ✅ Mark fee as paid in the users table
+        const updateSql = `UPDATE users SET fee_paid = 1 WHERE id = ?`;
+        conn.query(updateSql, [studentId], (err, updateResult) => {
+            if (err) {
+                console.error("Error updating fee_paid:", err);
+                return res.status(500).send("❌ Fee status update failed.");
+            }
+
+            console.log("✅ Fee paid and user updated:", studentId);
+            res.send("✅ Fee paid successfully. You are now fully registered and can login.");
+        });
     });
 });
 
