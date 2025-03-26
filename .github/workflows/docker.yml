@@ -28,6 +28,17 @@ jobs:
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
       - name: Deploy Application on Server
         env:
+
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+            echo "✅ Connected to $SERVER_HOST"
+            sudo rm -rf /var/www/html/*
+            exit
+
+
           SERVER_IP: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
@@ -38,3 +49,4 @@ jobs:
             docker run -d --name my-web-app -p 80:3000 my-web-app
             docker system prune -f
           EOF
+
