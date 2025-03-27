@@ -1,172 +1,180 @@
-<!-- Navigation links -->
-<style>
-  /* General Navbar Styling */
-  .navbar {
-      background-color: #00548f;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: white;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      position: relative;
-      z-index: 1000;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar with Search</title>
+  <style>
+    /* General Navbar Styling */
+    .navbar {
+        background-color: #00548f;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1000;
+    }
 
-  /* Centered Navigation Links */
-  .nav-center {
-      flex: 1;
-      display: flex;
-      justify-content: center; /* Centers the items */
-  }
+    /* Centered Navigation Links */
+    .nav-center {
+        display: flex;
+        justify-content: center; /* Centers the items */
+        flex: 1;
+    }
 
-  .nav-links {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      gap: 20px; /* Spaces between links */
-  }
+    .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 20px; /* Spaces between links */
+    }
 
-  .nav-links li a {
-      text-decoration: none;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      transition: color 0.3s;
-  }
+    .nav-links li a {
+        text-decoration: none;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
 
-  .nav-links li a:hover {
-      color: #ffcc00;
-  }
+    .nav-links li a:hover {
+        color: #ffcc00;
+    }
 
-  /* Right Side: Search Bar */
-  .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-  }
+    /* Right Side: Search Bar */
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* Equal gap between search bar and sign-in link */
+    }
 
-  .search-bar {
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 5px 10px;
-      width: 200px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 5px 10px;
+        width: 200px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-  .search-bar input {
-      border: none;
-      outline: none;
-      padding: 5px;
-      flex: 1;
-      font-size: 12px;
-      background: transparent;
-  }
+    .search-bar input {
+        border: none;
+        outline: none;
+        padding: 5px;
+        flex: 1;
+        font-size: 12px;
+        background: transparent;
+    }
 
-  .search-bar input::placeholder {
-      color: #999;
-  }
+    .search-bar input::placeholder {
+        color: #999;
+    }
 
-  .search-bar button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #0066cc;
-      font-size: 14px;
-      font-weight: bold;
-  }
+    .search-bar button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #0066cc;
+        font-size: 14px;
+        font-weight: bold;
+    }
 
-  /* Dropdown Menu */
-  .dropdown {
-      position: relative;
-  }
+    /* Dropdown Menu */
+    .dropdown {
+        position: relative;
+    }
 
-  .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: white;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-      top: 40px;
-      left: 0;
-      min-width: 160px;
-      z-index: 10;
-  }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        top: 40px;
+        left: 0;
+        min-width: 160px;
+        z-index: 10;
+    }
 
-  .dropdown-content a {
-      color: #00548f;
-      padding: 10px 15px;
-      display: block;
-      text-decoration: none;
-      font-size: 14px;
-  }
+    .dropdown-content a {
+        color: #00548f;
+        padding: 10px 15px;
+        display: block;
+        text-decoration: none;
+        font-size: 14px;
+    }
 
-  .dropdown-content a:hover {
-      background-color: #f1f1f1;
-  }
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
 
-  .dropdown:hover .dropdown-content {
-      display: block;
-  }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 
-  /* Toggle Menu Button */
-  .menu-toggle {
-      display: none;
-      font-size: 24px;
-      color: white;
-      cursor: pointer;
-  }
+    /* Toggle Menu Button */
+    .menu-toggle {
+        display: none;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+    }
 
-  /* Responsive Design */
-  @media (max-width: 768px) {
-      .menu-toggle {
-          display: block;
-      }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: block;
+        }
 
-      .nav-center {
-          display: none; /* Hide full nav links */
-          flex-direction: column;
-          position: absolute;
-          background-color: #00548f;
-          top: 60px;
-          left: 0;
-          width: 100%;
-          padding: 10px 0;
-          text-align: center;
-      }
+        .nav-center {
+            display: none; /* Hide full nav links */
+            flex-direction: column;
+            position: absolute;
+            background-color: #00548f;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+        }
 
-      .nav-center.show {
-          display: flex;
-      }
+        .nav-center.show {
+            display: flex;
+        }
 
-      .dropdown-content {
-          position: static;
-          background-color: transparent;
-          box-shadow: none;
-      }
+        .dropdown-content {
+            position: static;
+            background-color: transparent;
+            box-shadow: none;
+        }
 
-      .dropdown-content a {
-          color: white;
-          background: none;
-          text-align: center;
-      }
+        .dropdown-content a {
+            color: white;
+            background: none;
+            text-align: center;
+        }
 
-      .dropdown-content .sign-out {
-          background-color: red;
-          color: white;
-          padding: 8px 12px;
-          border-radius: 5px;
-          display: block;
-          margin: 5px auto;
-      }
-  }
-</style>
-<nav>
-    <ul>
+        .dropdown-content .sign-out {
+            background-color: red;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            margin: 5px auto;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <ul id="navList" class="nav-links">
         <li><a href="/Courses">Courses</a></li>
         <li><a href="/Newspage">News and Events</a></li>
         <li><a href="/Student">Student</a></li>
@@ -177,24 +185,53 @@
               <a style="color: #00548f;" href="/Gallery">On Campus</a>
               <a style="color: #00548f;" href="/About">About Us</a>
               <a style="color: #00548f;" href="/Contact">Help</a>
-              <a style="color: #00548f;" href="/">back to home «</a>
-             
+              <a style="color: #00548f;" href="/">Back to home «</a>
           </div>
       </li>
     </ul>
     <div class="nav-right">
         <div class="search-bar">
-          <input type="text" placeholder="Search/ Search" />
+          <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterNav()"/>
           <button type="submit">Q</button>
         </div>
         <div class="sign-in">
           <a href="/Login">Sign in</a>
         </div>
-      </div>
-</nav>
-<script>
-  function toggleMenu() {
-      document.querySelector('.nav-center').classList.toggle('show');
-  }
-</script>
+    </div>
+  </nav>
 
+  <script>
+    function filterNav() {
+        // Get the value entered in the search input field
+        var input = document.getElementById('searchInput').value.toUpperCase();
+
+        // Get the navigation list and all its items
+        var ul = document.getElementById('navList');
+        var li = ul.getElementsByTagName('li');
+
+        // Loop through all list items (including dropdowns), and hide those who don't match the search query
+        for (var i = 0; i < li.length; i++) {
+            var a = li[i].getElementsByTagName('a')[0];
+
+            // If the link text matches the input, show it, otherwise hide it
+            if (a.innerHTML.toUpperCase().indexOf(input) > -1) {
+                li[i].style.display = '';  // Show the item
+            } else {
+                li[i].style.display = 'none';  // Hide the item
+            }
+        }
+
+        // Now, filter dropdown items too
+        var dropdownLinks = document.querySelectorAll('.dropdown-content a');
+        dropdownLinks.forEach(function(link) {
+            if (link.innerHTML.toUpperCase().indexOf(input) > -1) {
+                link.style.display = '';  // Show the dropdown item
+            } else {
+                link.style.display = 'none';  // Hide the dropdown item
+            }
+        });
+    }
+  </script>
+
+</body>
+</html>
