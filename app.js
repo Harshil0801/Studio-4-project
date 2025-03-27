@@ -345,6 +345,30 @@ app.post('/pay-fee', (req, res) => {
     });
 });
 
+app.get('/search', (req, res) => {
+    const keyword = req.query.query;
+    const query = `%${keyword}%`;
+  
+    const userSearch = `SELECT username, role FROM users WHERE username LIKE ?`;
+    const courseSearch = `SELECT course_name, description FROM courses WHERE course_name LIKE ? OR description LIKE ?`;
+  
+    let results = {};
+  
+    conn.query(userSearch, [query], (err, userResults) => {
+      if (err) return res.status(500).send("Database error on user search");
+  
+      results.users = userResults;
+  
+      conn.query(courseSearch, [query, query], (err, courseResults) => {
+        if (err) return res.status(500).send("Database error on course search");
+  
+        results.courses = courseResults;
+  
+        res.render('searchResults', { results, keyword });
+      });
+    });
+  });
+  
 // Gallery/About
 app.get('/Gallery', (req, res) => res.render('Gallery', { title: 'Gallery' }));
 app.get('/about', (req, res) => res.render('about', { title: 'About' }));
