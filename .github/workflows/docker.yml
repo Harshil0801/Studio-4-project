@@ -1,4 +1,4 @@
-name: Deploy Express App with PM2 and Run ZAP Scan
+name: Deploy Node.js Application to Server
 
 on:
   push:
@@ -6,85 +6,54 @@ on:
       - main
 
 jobs:
-  # -----------------------
-  # 🚀 DEPLOY EXPRESS APP
-  # -----------------------
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout Repository
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # ✅ Install SSH and SSHPass for secure file transfer
-      - name: Install SSH & SSHPass
-        run: sudo apt-get install -y sshpass
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Change this if using a different version
 
-      # ✅ Debug SSH Variables (optional for troubleshooting)
-      - name: Debug SSH Variables
+      # Step 3: Install Dependencies
+      - name: Install Dependencies
         run: |
-          echo "Server Host: ${{ secrets.SERVER_HOST }}"
-          echo "Server Username: ${{ secrets.SERVER_USERNAME }}"
-      # ✅ Transfer Files to the Server
-      - name: Transfer Files to Server
+          npm install
+          npm run build # If you have a build script, otherwise skip this
+
+      # Step 4: Transfer Application Files to Server
+      - name: Transfer Application Files to Server
         env:
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
-            echo "✅ Successfully connected to $SERVER_HOST"
-            # Ensure PM2 is installed globally
-            sudo npm install -g pm2 || true
-            # Create or navigate to project directory
-            sudo mkdir -p /var/www/express-app
-            cd /var/www/express-app
-            # Stop PM2 process if running
-            npx pm2 stop subway-app || true
-            # Remove old files safely
-            sudo rm -rf /var/www/express-app/* || true
-            exit
-          EOF
-          # Securely copy new files from GitHub to the server
-          sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USERNAME@$SERVER_HOST:/var/www/express-app/
-      # ✅ Install Dependencies and Restart App
-      - name: Install Dependencies and Restart App
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" rsync -avz --exclude 'node_modules' --exclude '.git' ./ $SERVER_USER@$SERVER_IP:/var/www/my-web-app/
+
+      # Step 5: Restart Application on Server
+      - name: Restart Application on Server
         env:
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
-            echo "🚀 Installing Dependencies and Restarting PM2..."
-            # Go to project folder
-            cd /var/www/express-app
-            # Install production dependencies
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+            # Navigate to application directory
+            cd /var/www/my-web-app
+
+            # Install dependencies (if not already installed)
             npm install --production
-            # Start or restart the app with PM2
-            npx pm2 start app.js --name subway-app || npx pm2 restart subway-app
-            # Save PM2 process list to survive reboots
-            npx pm2 save
-            exit
-          EOF
-  # -----------------------
-  # 🔎 RUN OWASP ZAP SCAN
-  # -----------------------
-  zap-scan:
-   runs-on: ubuntu-latest
 
-   steps:
-    - name: Debug Environment
-      run: |
-        echo "Operating System: $(uname -a)"
-        echo "Runner Version: $RUNNER_VERSION"
-    # Install Docker using the official script to avoid dependency issues
-    - name: Install Docker
-      run: |
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sudo sh get-docker.sh
-        docker --version
-    # Run OWASP ZAP Full Scan using the correct image
-    - name: Run OWASP ZAP Full Scan
-      run: |
-        docker pull zaproxy/zap-stable
-        docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-full-scan.py -t http://${{ secrets.SERVER_HOST }}/ -J zap-report.json
+            # Stop existing application if running
+            pm2 stop my-web-app || true
+            pm2 delete my-web-app || true
+
+            # Start the application with PM2
+            pm2 start app.js --name my-web-app
+
+            # Save PM2 process to restart on reboot
+            pm2 save
+          EOF
