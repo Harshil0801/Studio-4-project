@@ -2,6 +2,48 @@
 <head>
     <!-- Include the header partial -->
     <%-include('partials/header.ejs') %>
+    <style>
+        .dashboard-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .dashboard-section h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .course-card, .assignment-card {
+            background: white;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .grade {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .due-date {
+            color: #e74c3c;
+            font-size: 0.9em;
+        }
+        .btn-view {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn-view:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
 
@@ -31,10 +73,105 @@
     </div>
 </div>
 
-<!-- Welcome message -->
-<h2 style="color: #171ee7d8; font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;">
-    WELCOME YOU ARE LOGIN TO YOU ACCOUNT. Click to <a href="/courses">View Courses</a>
-</h2>
+<!-- Student Dashboard -->
+<div class="container" style="margin-top: 30px;">
+    <!-- Welcome message with student name (you would dynamically insert this) -->
+    <h2 style="color: #171ee7d8; font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;">
+        WELCOME, [STUDENT NAME]. YOU ARE LOGGED IN TO YOUR ACCOUNT.
+    </h2>
+
+    <div class="row">
+        <!-- Current Courses Section -->
+        <div class="col-md-6">
+            <div class="dashboard-section">
+                <h3>Your Current Courses</h3>
+                
+                <!-- Course 1 -->
+                <div class="course-card">
+                    <h4>EDU 101 - Foundations of Education</h4>
+                    <p><strong>Instructor:</strong> Dr. Sarah Johnson</p>
+                    <p><strong>Schedule:</strong> Mon/Wed 10:00-11:30 AM</p>
+                    <p><strong>Room:</strong> Building A, Room 205</p>
+                    <a href="/courses/edu101" class="btn-view">View Course Details</a>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card">
+                    <h4>PSY 210 - Educational Psychology</h4>
+                    <p><strong>Instructor:</strong> Prof. Michael Chen</p>
+                    <p><strong>Schedule:</strong> Tue/Thu 1:00-2:30 PM</p>
+                    <p><strong>Room:</strong> Building B, Room 112</p>
+                    <a href="/courses/psy210" class="btn-view">View Course Details</a>
+                </div>
+                
+                <!-- Link to all courses -->
+                <div style="text-align: right;">
+                    <a href="/courses">View All Courses →</a>
+                </div>
+            </div>
+            
+            <!-- Grades/Results Section -->
+            <div class="dashboard-section">
+                <h3>Your Academic Results</h3>
+                
+                <div class="course-card">
+                    <h4>EDU 101 - Midterm Exam</h4>
+                    <p><strong>Score:</strong> 87/100</p>
+                    <p><strong>Grade:</strong> <span class="grade">B+</span></p>
+                    <p><strong>Feedback:</strong> Excellent understanding of core concepts. Keep up the good work!</p>
+                </div>
+                
+                <div class="course-card">
+                    <h4>PSY 210 - Research Paper</h4>
+                    <p><strong>Score:</strong> 92/100</p>
+                    <p><strong>Grade:</strong> <span class="grade">A</span></p>
+                    <p><strong>Feedback:</strong> Outstanding analysis and writing. Very well researched.</p>
+                </div>
+                
+                <div style="text-align: right;">
+                    <a href="/results">View Full Academic Record →</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assignments Section -->
+        <div class="col-md-6">
+            <div class="dashboard-section">
+                <h3>Upcoming Assignments</h3>
+                
+                <div class="assignment-card">
+                    <h4>EDU 101 - Lesson Plan Project</h4>
+                    <p><strong>Due:</strong> <span class="due-date">May 15, 2023</span></p>
+                    <p><strong>Status:</strong> Not Submitted</p>
+                    <a href="/assignments/edu101-lesson-plan" class="btn-view">View Assignment</a>
+                </div>
+                
+                <div class="assignment-card">
+                    <h4>PSY 210 - Case Study Analysis</h4>
+                    <p><strong>Due:</strong> <span class="due-date">May 22, 2023</span></p>
+                    <p><strong>Status:</strong> Draft Saved</p>
+                    <a href="/assignments/psy210-case-study" class="btn-view">Continue Working</a>
+                </div>
+                
+                <div style="text-align: right;">
+                    <a href="/assignments">View All Assignments →</a>
+                </div>
+            </div>
+            
+            <!-- Quick Links Section -->
+            <div class="dashboard-section">
+                <h3>Quick Links</h3>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="/timetable">View Your Timetable</a></li>
+                    <li class="list-group-item"><a href="/library">Library Resources</a></li>
+                    <li class="list-group-item"><a href="/events">Upcoming College Events</a></li>
+                    <li class="list-group-item"><a href="/profile">Update Your Profile</a></li>
+                    <li class="list-group-item"><a href="/support">Contact Academic Support</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Include the footer partial -->
 <%- include ('partials/footer.ejs') %>
