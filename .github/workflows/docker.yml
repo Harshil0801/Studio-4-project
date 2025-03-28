@@ -13,27 +13,49 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # Step 1: Build Docker Image
       - name: Build Docker Image
         run: |
-          docker build -t my-web-app .
+          docker build -t my-web-app:latest .
+
+      # Step 2: Save Docker Image as TAR
       - name: Save Docker Image
         run: |
-          docker save my-web-app -o my-web-app.tar
+          docker save -o my-web-app.tar my-web-app:latest
+
+      # Step 3: Transfer Docker Image to Server
       - name: Transfer Docker Image to Server
         env:
           SERVER_IP: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
+
+      # Step 4: SSH and Deploy Application on Server
       - name: Deploy Application on Server
         env:
           SERVER_IP: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+            set -e  # Exit on error
+
+            # Stop and remove the existing container if it exists
+            echo "Stopping existing container..."
             docker stop my-web-app || true
             docker rm my-web-app || true
+
+            # Load the new Docker image
+            echo "Loading new Docker image..."
             docker load -i /root/my-web-app.tar
-            docker run -d --name my-web-app -p 80:3000 my-web-app
+
+            # Run the new container
+            echo "Starting new container..."
+            docker run -d --name my-web-app -p 80:3000 --restart always my-web-app:latest
+
+            # Clean up old images and unused Docker data
+            echo "Cleaning up unused Docker resources..."
             docker system prune -f
+
+            echo "Deployment successful!"
           EOF
