@@ -1,4 +1,4 @@
-name: Deploy Web App to Server
+name: Deploy Node.js Application
 
 on:
   push:
@@ -10,52 +10,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    # Step 1: Checkout Repository
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      # Step 1: Build Docker Image
-      - name: Build Docker Image
-        run: |
-          docker build -t my-web-app:latest .
+    # Step 2: Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # Use your Node.js version here
 
-      # Step 2: Save Docker Image as TAR
-      - name: Save Docker Image
-        run: |
-          docker save -o my-web-app.tar my-web-app:latest
+    # Step 3: Install Dependencies
+    - name: Install Dependencies
+      run: |
+        npm install
+        npm run build # Optional, only if using build script
 
-      # Step 3: Transfer Docker Image to Server
-      - name: Transfer Docker Image to Server
-        env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
+    # Step 4: Transfer Application Files to Server
+    - name: Transfer Application Files to Server
+      env:
+        SERVER_IP: ${{ secrets.SERVER_HOST }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" rsync -avz --exclude 'node_modules' --exclude '.git' ./ $SERVER_USER@$SERVER_IP:/var/www/my-web-app
 
-      # Step 4: SSH and Deploy Application on Server
-      - name: Deploy Application on Server
-        env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            set -e  # Exit on error
-
-            # Stop and remove the existing container if it exists
-            echo "Stopping existing container..."
-            docker stop my-web-app || true
-            docker rm my-web-app || true
-
-            # Load the new Docker image
-            echo "Loading new Docker image..."
-            docker load -i /root/my-web-app.tar
-
-            # Run the new container
-            echo "Starting new container..."
-            docker run -d --name my-web-app -p 80:3000 --restart always my-web-app:latest
-
-            # Clean up old images and unused Docker data
-            echo "Cleaning up unused Docker resources..."
-            docker system prune -f
-
-            echo "Deployment successful!"
-          EOF
+    # Step 5: SSH into Server and Restart Application
+    - name: Restart Application on Server
+      env:
+        SERVER_IP: ${{ secrets.SERVER_HOST }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+          # Navigate to the application directory
+          cd /var/www/my-web-app
+          
+          # Install dependencies
+          npm install --production
+          
+          # Stop existing application (if running)
+          pm2 stop my-web-app || true
+          pm2 delete my-web-app || true
+          
+          # Start application with PM2
+          pm2 start app.js --name my-web-app
+          
+          # Save PM2 configuration to restart on reboot
+          pm2 save
+        EOF
