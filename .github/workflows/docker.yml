@@ -14,17 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
+      # Step 2: Set up Node.js on GitHub Runner (for local builds)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Change this if using a different version
+          node-version: '18' # Update version if needed
 
       # Step 3: Install Dependencies
       - name: Install Dependencies
         run: |
           npm install
-          npm run build # Optional, if you have a build script
+          npm run build || true # Skip if no build script exists
 
       # Step 4: Transfer Application Files to Server
       - name: Transfer Application Files to Server
@@ -36,26 +36,47 @@ jobs:
           -e "ssh -o StrictHostKeyChecking=no" \
           --exclude 'node_modules' --exclude '.git' ./ $SERVER_USER@$SERVER_IP:/var/www/my-web-app/
 
-      # Step 5: Restart Application on Server Using PM2
+      # Step 5: Install Node.js, npm, and pm2 on Server
+      - name: Install Node.js and pm2 on Server
+        env:
+          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+            # Update system and install Node.js if not installed
+            if ! command -v node &> /dev/null
+            then
+              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # Install pm2 if not installed
+            if ! command -v pm2 &> /dev/null
+            then
+              sudo npm install -g pm2
+            fi
+          EOF
+
+      # Step 6: Restart Application on Server Using PM2
       - name: Restart Application on Server
         env:
           SERVER_IP: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            # Navigate to the application directory
+            # Navigate to application directory
             cd /var/www/my-web-app
 
             # Install dependencies on the server
             npm install --production
 
-            # Stop the existing application if running
+            # Stop and delete the existing pm2 process if running
             pm2 stop my-web-app || true
             pm2 delete my-web-app || true
 
-            # Start the application using PM2
+            # Start the application with pm2
             pm2 start app.js --name my-web-app
 
-            # Save the PM2 configuration to restart after reboot
+            # Save pm2 process for restart on reboot
             pm2 save
           EOF
