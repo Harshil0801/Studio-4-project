@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npm run build # If you have a build script, otherwise skip this
+          npm run build # Optional, if you have a build script
 
       # Step 4: Transfer Application Files to Server
       - name: Transfer Application Files to Server
@@ -32,28 +32,30 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" rsync -avz --exclude 'node_modules' --exclude '.git' ./ $SERVER_USER@$SERVER_IP:/var/www/my-web-app/
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" rsync -avz \
+          -e "ssh -o StrictHostKeyChecking=no" \
+          --exclude 'node_modules' --exclude '.git' ./ $SERVER_USER@$SERVER_IP:/var/www/my-web-app/
 
-      # Step 5: Restart Application on Server
+      # Step 5: Restart Application on Server Using PM2
       - name: Restart Application on Server
         env:
           SERVER_IP: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            # Navigate to application directory
+            # Navigate to the application directory
             cd /var/www/my-web-app
 
-            # Install dependencies (if not already installed)
+            # Install dependencies on the server
             npm install --production
 
-            # Stop existing application if running
+            # Stop the existing application if running
             pm2 stop my-web-app || true
             pm2 delete my-web-app || true
 
-            # Start the application with PM2
+            # Start the application using PM2
             pm2 start app.js --name my-web-app
 
-            # Save PM2 process to restart on reboot
+            # Save the PM2 configuration to restart after reboot
             pm2 save
           EOF
