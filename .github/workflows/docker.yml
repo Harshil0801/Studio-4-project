@@ -24,16 +24,16 @@ jobs:
       - name: Debug SSH Variables
         run: |
           echo "Server Host: ${{ secrets.SERVER_HOST }}"
-          echo "Server Username: ${{ secrets.SERVER_USERNAME }}"
+          echo "Server User: ${{ secrets.SERVER_USER }}"
 
       # ✅ Transfer Files to the Server
       - name: Transfer Files to Server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             echo "✅ Successfully connected to $SERVER_HOST"
             # Ensure PM2 is installed globally
             sudo npm install -g pm2 || true
@@ -47,16 +47,16 @@ jobs:
             exit
           EOF
           # Securely copy new files from GitHub to the server
-          sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USERNAME@$SERVER_HOST:/var/www/express-app/
+          sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USER@$SERVER_HOST:/var/www/express-app/
 
       # ✅ Install Dependencies and Restart App
       - name: Install Dependencies and Restart App
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             echo "🚀 Installing Dependencies and Restarting PM2..."
             # Go to project folder
             cd /var/www/express-app
