@@ -106,12 +106,14 @@
       <input type="email" name="email" placeholder="Email Address" required>
       <input type="password" name="password" placeholder="Password" required>
 
+      <!-- Role Selection -->
       <select name="role" id="roleSelect" onchange="toggleCourseDropdown()" required>
         <option value="">-- Select Role --</option>
         <option value="student">Student</option>
         <option value="teacher">Teacher</option>
       </select>
 
+      <!-- Course Selection (only for students) -->
       <div id="courseDropdown">
         <select name="courseId">
           <% courses.forEach(course => { %>
@@ -132,6 +134,7 @@
     function toggleCourseDropdown() {
       const role = document.getElementById("roleSelect").value;
       const courseDropdown = document.getElementById("courseDropdown");
+      // Show course dropdown only for "student" role
       courseDropdown.style.display = role === "student" ? "block" : "none";
     }
   </script>
