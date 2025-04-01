@@ -250,6 +250,11 @@ app.get('/funding', (req, res) => {
     res.render('studyOptions');
   });
   
+app.get('/timetable', (req, res) => {
+    res.render('timetable'); 
+});
+
+  
 
 // Courses
 app.get('/Courses', function(req, res) {
