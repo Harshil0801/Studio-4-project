@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn-back:hover {
+            background-color: #1a252f;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📚 My Academic Timetable</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Course</th>
+                    <th>Instructor</th>
+                    <th>Room</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Monday</td>
+                    <td>8:00 - 9:30</td>
+                    <td>EDU 201: Curriculum Development</td>
+                    <td>Dr. Sarah Johnson</td>
+                    <td>B-205</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td>9:30 - 11:00</td>
+                    <td>EDU 203: Educational Technology</td>
+                    <td>Prof. Alan Smith</td>
+                    <td>C-102</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td>11:00 - 12:30</td>
+                    <td>PSY 210: Educational Psychology</td>
+                    <td>Dr. Michael Chen</td>
+                    <td>A-312</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td>2:00 - 3:30</td>
+                    <td>EDU 205: Assessment Strategies</td>
+                    <td>Dr. Emily Wilson</td>
+                    <td>B-107</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td>3:30 - 5:00</td>
+                    <td>EDU 207: Special Education</td>
+                    <td>Dr. Robert Taylor</td>
+                    <td>A-215</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="/" class="btn-back">⬅️ Back to Dashboard</a>
+    </div>
+
+</body>
+</html>
