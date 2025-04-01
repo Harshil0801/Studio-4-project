@@ -14,13 +14,32 @@ jobs:
       - name: ⬇️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🔧 Install SSH & SSHPass
-        run: sudo apt-get install -y sshpass
+      - name: Install nvm and Node.js
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+          source ~/.bashrc
+          nvm install 16  # Install a specific version of Node.js (adjust as necessary)
+          nvm use 16
+
+      - name: Clean pm2 installation
+        run: |
+          sudo npm uninstall -g pm2
+          sudo rm -rf /usr/lib/node_modules/pm2
+          sudo rm -rf ~/.pm2
+          sudo npm cache clean --force
+
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Clean previous installations
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
 
       - name: 📦 Install Dependencies & Build React App
         run: |
           export CI=false  # Prevent ESLint warnings from failing the build
-          npm install
+          npm install --force  # Force installation to avoid conflicts
           npm run build
 
       - name: 🚚 Transfer Files to Apache Server
@@ -35,7 +54,6 @@ jobs:
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Connected to server. Cleaning old files..."
             sudo rm -rf /var/www/html/*  # Remove old build files
-            # Ensure Apache user owns the /var/www/html directory after clean up
             sudo chown -R www-data:www-data /var/www/html/
             exit
           EOF
@@ -51,8 +69,7 @@ jobs:
             exit
           EOF
 
-      # Optional: Uncomment to restart Apache server after deployment
-      # - name: 🔁 Restart Apache Server
+      # - name: 🔁 (Optional) Restart Apache Server
       #   if: always()
       #   env:
       #     SERVER_HOST: ${{ secrets.SERVER_HOST }}
