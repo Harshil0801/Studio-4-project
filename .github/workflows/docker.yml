@@ -1,4 +1,4 @@
-name: Deploy Web App to Server
+name: Deploy Express App with PM2 and Run ZAP Scan
 
 on:
   push:
@@ -6,34 +6,90 @@ on:
       - main
 
 jobs:
+  # -----------------------
+  # 🚀 DEPLOY EXPRESS APP
+  # -----------------------
   deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Build Docker Image
+      # ✅ Install SSH and SSHPass for secure file transfer
+      - name: Install SSH & SSHPass
+        run: sudo apt-get install -y sshpass
+
+      # ✅ Debug SSH Variables (optional for troubleshooting)
+      - name: Debug SSH Variables
         run: |
-          docker build -t my-web-app .
-      - name: Save Docker Image
-        run: |
-          docker save my-web-app -o my-web-app.tar
-      - name: Transfer Docker Image to Server
+          echo "Server Host: ${{ secrets.SERVER_HOST }}"
+          echo "Server User: ${{ secrets.SERVER_USER }}"
+
+      # ✅ Transfer Files to the Server
+      - name: Transfer Files to Server
         env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no my-web-app.tar $SERVER_USER@$SERVER_IP:/root/
-      - name: Deploy Application on Server
-        env:
-          SERVER_IP: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            docker stop my-web-app || true
-            docker rm my-web-app || true
-            docker load -i /root/my-web-app.tar
-            docker run -d --name my-web-app -p 80:3000 my-web-app
-            docker system prune -f
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
+            echo "✅ Successfully connected to $SERVER_HOST"
+            # Ensure PM2 is installed globally
+            sudo npm install -g pm2 || true
+            # Create or navigate to project directory
+            sudo mkdir -p /var/www/my-web-app
+            cd /var/www/my-web-app
+            # Stop PM2 process if running
+            npx pm2 stop my-web-app || true
+            # Remove old files safely
+            sudo rm -rf /var/www/my-web-app/* || true
+            exit
           EOF
+          # Securely copy new files from GitHub to the server
+          sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
+
+      # ✅ Install Dependencies and Restart App
+      - name: Install Dependencies and Restart App
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
+            echo "🚀 Installing Dependencies and Restarting PM2..."
+            # Go to project folder
+            cd /var/www/my-web-app
+            # Install production dependencies
+            npm install --production
+            # Start or restart the app with PM2
+            npx pm2 start app.js --name my-web-app || npx pm2 restart my-web-app
+            # Save PM2 process list to survive reboots
+            npx pm2 save
+            exit
+          EOF
+
+  # -----------------------
+  # 🔎 RUN OWASP ZAP SCAN
+  # -----------------------
+  zap-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Debug Environment
+        run: |
+          echo "Operating System: $(uname -a)"
+          echo "Runner Version: $RUNNER_VERSION"
+
+      # Install Docker using the official script to avoid dependency issues
+      - name: Install Docker
+        run: |
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+          docker --version
+
+      # Run OWASP ZAP Full Scan using the correct image
+      - name: Run OWASP ZAP Full Scan
+        run: |
+          docker pull zaproxy/zap-stable
+          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-full-scan.py -t http://${{ secrets.SERVER_HOST }}/ -J zap-report.json
