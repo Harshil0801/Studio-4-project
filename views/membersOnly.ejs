@@ -2,76 +2,165 @@
 <head>
     <!-- Include the header partial -->
     <%-include('partials/header.ejs') %>
+    <%- include ('partials/navbar2.ejs') %>
     <style>
-        .dashboard-section {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .dashboard-section h3 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        .course-card, .assignment-card {
-            background: white;
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
-        .grade {
-            font-weight: bold;
-            color: #27ae60;
-        }
-        .due-date {
-            color: #e74c3c;
-            font-size: 0.9em;
-        }
-        .btn-view {
-            background-color: #3498db;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .btn-view:hover {
-            background-color: #2980b9;
-        }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f9fc;
+}
+
+.container {
+    width: 85%;
+    margin: auto;
+    padding: 20px 0;
+}
+
+.main-content {
+    background-color: #004080;
+    padding: 40px 0;
+    color: white;
+    text-align: center;
+}
+
+.logo {
+    width: 120px;
+    margin-bottom: 10px;
+}
+
+#headerid {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 5px;
+}
+
+.dashboard-section {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.dashboard-section:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-section h3 {
+    color: #004080;
+    border-bottom: 2px solid #004080;
+    padding-bottom: 10px;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.course-card,
+.assignment-card {
+    background: #f9f9f9;
+    border-left: 4px solid #004080;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+}
+
+.course-card h4,
+.assignment-card h4 {
+    font-size: 18px;
+    color: #333;
+}
+
+.course-card p,
+.assignment-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.grade {
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.due-date {
+    color: #e74c3c;
+    font-size: 0.9em;
+}
+
+.btn-view {
+    background-color: #004080;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn-view:hover {
+    background-color: #002f5c;
+}
+
+.list-group {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.list-group-item {
+    background-color: #f9f9f9;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: #f0f8ff;
+}
+
+.list-group-item a {
+    text-decoration: none;
+    color: #004080;
+    font-weight: bold;
+}
+
+.list-group-item a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    background-color: #004080;
+    padding: 15px 0;
+    color: white;
+    text-align: center;
+}
+
+footer a {
+    color: #f7b731;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .dashboard-section {
+        padding: 20px;
+    }
+
+    #headerid {
+        font-size: 24px;
+    }
+}
+
     </style>
 </head>
 <body>
-
-<div class="header">
-    <div class="container">
-        <!-- Display NEWS section -->
-        <b>NEWS:</b>
-        <!-- Display scrolling updates -->
-        <marquee>
-            Updates on clubs, organizations, and extracurricular activities, as well as stories about student achievements and accomplishments. 
-        </marquee>
-    </div>
-</div>
-
-<div class="main-content">
-    <div class="container">
-        <!-- Logo and college name -->
-        <div class="logo-container">
-            <!-- Display college logo -->
-            <img src="/public/css/images/logo.png" alt="logo" class="logo">
-            <!-- Display college name -->
-            <h1 id="headerid"> NZ COLLEGE OF EDUCATION AUCKLAND</h1>
-        </div>
-
-        <!-- Include navbar partial -->
-        <%- include ('partials/navbar2.ejs') %>
-    </div>
-</div>
 
 <!-- Student Dashboard -->
 <div class="container" style="margin-top: 30px;">
