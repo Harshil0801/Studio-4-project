@@ -42,6 +42,21 @@ jobs:
           npm install --force  # Force installation to avoid conflicts
           npm run build
 
+      - name: 🚚 Ensure Directories Exist on Remote Server
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          echo "Connecting to $SERVER_HOST to ensure necessary directories exist..."
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
+            echo "✅ Creating directories if they do not exist..."
+            sudo mkdir -p /var/www/my-web-app/node_modules
+            sudo mkdir -p /var/www/my-web-app
+            sudo chown -R www-data:www-data /var/www/my-web-app
+            exit
+          EOF
+
       - name: 🚚 Transfer Files to Apache Server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -49,27 +64,26 @@ jobs:
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
           echo "Connecting to $SERVER_HOST..."
-
-          # SSH to clean up old files
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "✅ Connected to server. Cleaning old files..."
-            sudo rm -rf /var/www/html/*  # Remove old build files
-            sudo chown -R www-data:www-data /var/www/html/
+            sudo rm -rf /var/www/my-web-app/*  # Remove old build files
+            sudo chown -R www-data:www-data /var/www/my-web-app/
             exit
           EOF
 
           # Upload new build files
           echo "📤 Uploading new build files..."
-          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/html/
+          sshpass -p "$SERVER_PASSWORD" scp -r build/* $SERVER_USERNAME@$SERVER_HOST:/var/www/my-web-app/
 
           # Ensure file ownership after upload
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_HOST << 'EOF'
             echo "Ensuring correct file permissions..."
-            sudo chown -R www-data:www-data /var/www/html/
+            sudo chown -R www-data:www-data /var/www/my-web-app/
             exit
           EOF
 
-      # - name: 🔁 (Optional) Restart Apache Server
+      # Optional: Restart Apache server (if necessary)
+      # - name: 🔁 Restart Apache Server
       #   if: always()
       #   env:
       #     SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -81,26 +95,3 @@ jobs:
       #       sudo systemctl restart apache2
       #       exit
       #     EOF
-
-  zap-scan:
-    name: 🛡️ OWASP ZAP Security Scan
-    runs-on: ubuntu-latest
-    needs: deploy  # Waits for deploy job to finish
-
-    steps:
-      - name: 🖥️ Debug Environment Info
-        run: |
-          echo "OS Info: $(uname -a)"
-          echo "Runner Version: $RUNNER_VERSION"
-
-      - name: 🐳 Install Docker
-        run: |
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
-          docker --version
-
-      - name: 🔎 Run OWASP ZAP Full Scan
-        run: |
-          docker pull zaproxy/zap-stable
-          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-full-scan.py \
-            -t http://${{ secrets.SERVER_HOST }}/ -a -I
