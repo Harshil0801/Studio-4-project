@@ -14,6 +14,13 @@ app.use(session({ secret: 'yoursecret', resave: true, saveUninitialized: true })
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.locals.loggedin = req.session.loggedin || false;
+    res.locals.username = req.session.username || null;
+    res.locals.role = req.session.role || null;
+    next();
+  });
+  
 // Routes
 app.get('/', (req, res) => res.render("home"));
 app.get('/Newspage', (req, res) => res.render("Newspage.ejs"));
