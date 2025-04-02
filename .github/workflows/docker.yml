@@ -6,9 +6,6 @@ on:
       - main
 
 jobs:
-  # -----------------------
-  # 🚀 DEPLOY EXPRESS APP
-  # -----------------------
   deploy:
     runs-on: ubuntu-latest
 
@@ -40,7 +37,7 @@ jobs:
             exit
           EOF
 
-          # ✅ Correctly copy from GitHub workspace
+          # ✅ Correctly copy all project files from GitHub workspace
           sshpass -p "$SERVER_PASSWORD" scp -r ./ $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
 
       - name: Install Dependencies and Restart App
@@ -48,19 +45,25 @@ jobs:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          DB_HOST: localhost
+          DB_USER: root
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: your_db_name
         run: |
-          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
+          sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
             echo "🚀 Installing Dependencies and Starting App"
             cd /var/www/my-web-app
             npm install --production
-            PORT=3000 npx pm2 start app.js --name my-web-app || npx pm2 restart my-web-app
-            npx pm2 save
+            export DB_HOST=$DB_HOST
+            export DB_USER=$DB_USER
+            export DB_PASSWORD=$DB_PASSWORD
+            export DB_NAME=$DB_NAME
+            export PORT=3000
+            pm2 start app.js --name my-web-app || pm2 restart my-web-app
+            pm2 save
             exit
           EOF
 
-  # -----------------------
-  # 🔎 RUN OWASP ZAP SCAN
-  # -----------------------
   zap-scan:
     runs-on: ubuntu-latest
 
