@@ -36,7 +36,7 @@ jobs:
           EOF
 
           echo "🚀 Uploading project files..."
-          sshpass -p "$SERVER_PASSWORD" scp -r . $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
+            sshpass -p "$SERVER_PASSWORD" rsync -avz --exclude 'node_modules' --exclude '.git' ./ $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
 
       - name: Install Dependencies and Restart App
         env:
