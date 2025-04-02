@@ -5,7 +5,7 @@ var mysql = require('mysql');
 var conn = mysql.createConnection({
 	host: 'localhost', // Database host
 	user: 'root',      // Database user
-	password: '',      // Database password
+	password: 'mysql',      // Database password
 	database: 'ramandb' // Database name
 }); 
 
