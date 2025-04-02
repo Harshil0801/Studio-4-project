@@ -29,7 +29,6 @@ jobs:
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             echo "✅ Connected to $SERVER_HOST"
-            sudo npm install -g pm2 || true
             sudo mkdir -p /var/www/my-web-app
             cd /var/www/my-web-app
             npx pm2 stop my-web-app || true
@@ -37,7 +36,6 @@ jobs:
             exit
           EOF
 
-          # ✅ Correctly copy all project files from GitHub workspace
           sshpass -p "$SERVER_PASSWORD" scp -r ./ $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
 
       - name: Install Dependencies and Restart App
