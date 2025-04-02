@@ -16,17 +16,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # ✅ Install SSH and SSHPass for secure file transfer
       - name: Install SSH & SSHPass
         run: sudo apt-get install -y sshpass
 
-      # ✅ Debug SSH Variables (optional)
       - name: Debug SSH Variables
         run: |
           echo "Server Host: ${{ secrets.SERVER_HOST }}"
           echo "Server User: ${{ secrets.SERVER_USER }}"
 
-      # ✅ Transfer Files to the Server
       - name: Transfer Files to Server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -43,9 +40,9 @@ jobs:
             exit
           EOF
 
-          sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
+          # ✅ Correctly copy from GitHub workspace
+          sshpass -p "$SERVER_PASSWORD" scp -r ./ $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
 
-      # ✅ Install Dependencies and Restart App with PORT
       - name: Install Dependencies and Restart App
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
