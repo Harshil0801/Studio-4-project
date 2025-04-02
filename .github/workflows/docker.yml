@@ -20,7 +20,7 @@ jobs:
       - name: Install SSH & SSHPass
         run: sudo apt-get install -y sshpass
 
-      # ✅ Debug SSH Variables (optional for troubleshooting)
+      # ✅ Debug SSH Variables (optional)
       - name: Debug SSH Variables
         run: |
           echo "Server Host: ${{ secrets.SERVER_HOST }}"
@@ -34,22 +34,18 @@ jobs:
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
-            echo "✅ Successfully connected to $SERVER_HOST"
-            # Ensure PM2 is installed globally
+            echo "✅ Connected to $SERVER_HOST"
             sudo npm install -g pm2 || true
-            # Create or navigate to project directory
             sudo mkdir -p /var/www/my-web-app
             cd /var/www/my-web-app
-            # Stop PM2 process if running
             npx pm2 stop my-web-app || true
-            # Remove old files safely
             sudo rm -rf /var/www/my-web-app/* || true
             exit
           EOF
-          # Securely copy new files from GitHub to the server
+
           sshpass -p "$SERVER_PASSWORD" scp -r * $SERVER_USER@$SERVER_HOST:/var/www/my-web-app/
 
-      # ✅ Install Dependencies and Restart App
+      # ✅ Install Dependencies and Restart App with PORT
       - name: Install Dependencies and Restart App
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -57,14 +53,10 @@ jobs:
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
           sshpass -p "$SERVER_PASSWORD" ssh -tt -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
-            echo "🚀 Installing Dependencies and Restarting PM2..."
-            # Go to project folder
+            echo "🚀 Installing Dependencies and Starting App"
             cd /var/www/my-web-app
-            # Install production dependencies
             npm install --production
-            # Start or restart the app with PM2
-            npx pm2 start app.js --name my-web-app || npx pm2 restart my-web-app
-            # Save PM2 process list to survive reboots
+            PORT=3000 npx pm2 start app.js --name my-web-app || npx pm2 restart my-web-app
             npx pm2 save
             exit
           EOF
@@ -81,14 +73,12 @@ jobs:
           echo "Operating System: $(uname -a)"
           echo "Runner Version: $RUNNER_VERSION"
 
-      # Install Docker using the official script to avoid dependency issues
       - name: Install Docker
         run: |
           curl -fsSL https://get.docker.com -o get-docker.sh
           sudo sh get-docker.sh
           docker --version
 
-      # Run OWASP ZAP Full Scan using the correct image
       - name: Run OWASP ZAP Full Scan
         run: |
           docker pull zaproxy/zap-stable
