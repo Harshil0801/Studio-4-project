@@ -392,5 +392,7 @@ app.get('/logout', (req, res) => {
 });
 
 // Start Server
-app.listen(process.env.port || 3000);
-console.log('Running at Port 3000');
+app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
+    console.log(`Server running at Port ${process.env.PORT || 3000}`);
+  });
+  
