@@ -357,30 +357,6 @@ app.post('/pay-fee', (req, res) => {
     });
 });
 
-app.get('/search', (req, res) => {
-    const keyword = req.query.query;
-    const query = `%${keyword}%`;
-  
-    const userSearch = `SELECT username, role FROM users WHERE username LIKE ?`;
-    const courseSearch = `SELECT course_name, description FROM courses WHERE course_name LIKE ? OR description LIKE ?`;
-  
-    let results = {};
-  
-    conn.query(userSearch, [query], (err, userResults) => {
-      if (err) return res.status(500).send("Database error on user search");
-  
-      results.users = userResults;
-  
-      conn.query(courseSearch, [query, query], (err, courseResults) => {
-        if (err) return res.status(500).send("Database error on course search");
-  
-        results.courses = courseResults;
-  
-        res.render('searchResults', { results, keyword });
-      });
-    });
-  });
-  
 // Gallery/About
 app.get('/Gallery', (req, res) => res.render('Gallery', { title: 'Gallery' }));
 app.get('/about', (req, res) => res.render('about', { title: 'About' }));
@@ -390,6 +366,59 @@ app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
+
+
+
+
+
+// STEP 1: Ask for username
+app.route('/reset-password-step1')
+  .get((req, res) => res.render('reset-step1'))
+  .post((req, res) => {
+    const { username } = req.body;
+    conn.query('SELECT * FROM users WHERE username = ?', [username], (err, result) => {
+      if (err || result.length === 0) return res.send("❌ Username not found");
+      req.session.resetUser = { username };
+      res.redirect('/reset-password-step2');
+    });
+  });
+
+// STEP 2: Ask for email
+app.route('/reset-password-step2')
+  .get((req, res) => res.render('reset-step2'))
+  .post((req, res) => {
+    const { email } = req.body;
+    const { username } = req.session.resetUser || {};
+    if (!username) return res.redirect('/reset-password-step1');
+
+    conn.query('SELECT * FROM users WHERE username = ? AND email = ?', [username, email], (err, result) => {
+      if (err || result.length === 0) return res.send("❌ Email does not match");
+      req.session.resetUser.verified = true;
+      res.redirect('/reset-password-step3');
+    });
+  });
+
+// STEP 3: Set new password
+app.route('/reset-password-step3')
+  .get((req, res) => {
+    const { resetUser } = req.session;
+    if (!resetUser?.verified) return res.redirect('/login');
+    res.render('reset-step3', { username: resetUser.username });
+  })
+  .post((req, res) => {
+    const { password } = req.body;
+    const { username } = req.session.resetUser || {};
+    if (!username) return res.redirect('/login');
+
+    conn.query('UPDATE users SET password = ? WHERE username = ?', [password, username], err => {
+      if (err) return res.send("❌ Failed to update password");
+      req.session.resetUser = null;
+      res.send("✅ Password updated. <a href='/login'>Login</a>");
+    });
+  });
+
+
+
 
 // Start Server
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {

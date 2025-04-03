@@ -84,12 +84,10 @@
     </style>
 </head>
 <body>
+            
+    <%- include('partials/navbar1.ejs') %>
+
     <div class="container">
-        <div class="logo-container">
-            <img src="/public/css/images/logo.png" alt="logo" class="logo">
-            <h1 id="headerid">RD College of Education Auckland</h1>
-        </div>
-        <%- include('partials/navbar1.ejs') %>
 
         <h2 style="color: #171ee7d8;">WELCOME, [STUDENT NAME]. YOU ARE LOGGED IN TO YOUR ACCOUNT.</h2>
 
@@ -102,7 +100,7 @@
                         <h4>EDU 101 - Foundations of Education</h4>
                         <p><strong>Instructor:</strong> Dr. Sarah Johnson</p>
                         <p><strong>Schedule:</strong> Mon/Wed 10:00-11:30 AM</p>
-                        <a href="/courses/edu101" class="btn-view">View Course</a>
+                        <a href="/Courses" class="btn-view">View Course</a>
                     </div>
                 </div>
                 <div class="dashboard-section">
@@ -127,8 +125,8 @@
                     <h3>Quick Links</h3>
                     <ul class="list-group">
                         <li class="list-group-item"><a href="/timetable">View Your Timetable</a></li>
-                        <li class="list-group-item"><a href="/library">Library Resources</a></li>
-                        <li class="list-group-item"><a href="/events">Upcoming College Events</a></li>
+                        <li class="list-group-item"><a href="/findmore">Library Resources</a></li>
+                        <li class="list-group-item"><a href="/Newspage">Upcoming College Events</a></li>
                         <li class="list-group-item"><a href="/profile">Update Your Profile</a></li>
                     </ul>
                 </div>
