@@ -27,7 +27,7 @@ app.get('/Newspage', (req, res) => res.render("Newspage.ejs"));
 app.get('/Student', (req, res) => res.render('Student.ejs'));
 app.get('/Staff', (req, res) => res.render('Staff.ejs'));
 app.get('/findmore', (req, res) => res.render('findmore.ejs'));
-app.get('/login', (req, res) => res.render('login.ejs'));
+app.get('/login', (req, res) => res.render('Login.ejs'));
 
 // Authentication
 app.post('/auth', function(req, res) {
