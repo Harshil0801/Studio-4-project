@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/header.ejs') %>
+    <style>
+        body {
+            background: linear-gradient(to right, #005faf, #002b56);
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            padding: 40px;
+        }
+        .container {
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            color: black;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        h2 {
+            text-align: center;
+            color: #005faf;
+        }
+        input[type="text"], button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #005faf;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Step 1: Enter Username</h2>
+        <form method="POST" action="/reset-password-step1">
+            <input type="text" name="username" placeholder="Enter Username" required>
+            <button type="submit">Next</button>
+        </form>
+    </div>
+</body>
+</html>
