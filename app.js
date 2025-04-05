@@ -369,15 +369,22 @@ app.get('/logout', (req, res) => {
 
 
 
-
+const validator = require('validator');
 
 // STEP 1: Ask for username
 app.route('/reset-password-step1')
   .get((req, res) => res.render('reset-step1'))
   .post((req, res) => {
     const { username } = req.body;
+
+    if (!username || !validator.isAlphanumeric(username)) {
+      return res.send("❌ Invalid username format");
+    }
+
     conn.query('SELECT * FROM users WHERE username = ?', [username], (err, result) => {
-      if (err || result.length === 0) return res.send("❌ Username not found");
+      if (err) return res.send("❌ Database error");
+      if (result.length === 0) return res.send("❌ Username not found");
+
       req.session.resetUser = { username };
       res.redirect('/reset-password-step2');
     });
@@ -389,10 +396,14 @@ app.route('/reset-password-step2')
   .post((req, res) => {
     const { email } = req.body;
     const { username } = req.session.resetUser || {};
+
     if (!username) return res.redirect('/reset-password-step1');
+    if (!validator.isEmail(email)) return res.send("❌ Invalid email format");
 
     conn.query('SELECT * FROM users WHERE username = ? AND email = ?', [username, email], (err, result) => {
-      if (err || result.length === 0) return res.send("❌ Email does not match");
+      if (err) return res.send("❌ Database error");
+      if (result.length === 0) return res.send("❌ Email does not match");
+
       req.session.resetUser.verified = true;
       res.redirect('/reset-password-step3');
     });
@@ -408,12 +419,17 @@ app.route('/reset-password-step3')
   .post((req, res) => {
     const { password } = req.body;
     const { username } = req.session.resetUser || {};
+
     if (!username) return res.redirect('/login');
+    if (!validator.isStrongPassword(password, { minLength: 6 })) {
+      return res.send("❌ Password must be at least 6 characters and include a number, lowercase and uppercase letter.");
+    }
 
     conn.query('UPDATE users SET password = ? WHERE username = ?', [password, username], err => {
       if (err) return res.send("❌ Failed to update password");
+
       req.session.resetUser = null;
-      res.send("✅ Password updated. <a href='/login'>Login</a>");
+      res.send("✅ Password updated. <a href='/login'>Login here</a>");
     });
   });
 
